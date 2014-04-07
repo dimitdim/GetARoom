@@ -34,7 +34,7 @@ static word homePage() {
   word h = t / 3600;
   byte m = (t / 60) % 60;
   byte s = t % 60;
-  boolean d = digitalRead(2);
+  int d = analogRead(2);
   bfill = ether.tcpOffset();
   bfill.emit_p(PSTR(
     "HTTP/1.0 200 OK\r\n"
