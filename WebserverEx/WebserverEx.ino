@@ -30,6 +30,8 @@ void setup () {
   ether.printIp("GW:  ", ether.gwip);  
   ether.printIp("DNS: ", ether.dnsip); 
 }
+
+void(* resetFunc )(void)=0;
  
 static word homePage() {
   long t = millis() / 1000;
@@ -48,6 +50,8 @@ static word homePage() {
     "<h1>$D$D:$D$D:$D$D</h1>"
     "<h2>Pin 2:$D</h2>"),
       h/10, h%10, m/10, m%10, s/10, s%10, d);
+  if (m>4)
+    resetFunc();
   return bfill.position();
 }
  
