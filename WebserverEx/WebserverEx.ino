@@ -5,10 +5,12 @@
  
 // ethernet interface mac address, must be unique on the LAN
 static byte mymac[] = { 0x74,0x69,0x69,0x2D,0x30,0x31 };
-static byte myip[] = { 192,168,1,203 };
+static byte myip[] = { 10,26,26,26 };
  
 byte Ethernet::buffer[500];
 BufferFiller bfill;
+
+#define STATIC 1
  
 void setup () {
   Serial.begin(57600);
