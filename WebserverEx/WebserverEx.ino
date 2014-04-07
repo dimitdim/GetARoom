@@ -52,13 +52,12 @@ static word homePage() {
     "Content-Type: text/html\r\n"
     "Pragma: no-cache\r\n"
     "\r\n"
-    "<html><meta http-equiv='refresh' content='1'/>"
-    "<head><title>GetARoom</title></head>"
-    "<body><p>"
-    "<h1>Uptime: $D$D:$D$D:$D$D</h1>"
-    "<h1>Pot Value:$D</h1>"
-    "<h1>Temperature:$D</h1>"
-    "</p></body></html>"),
+
+    "<meta http-equiv='refresh' content='1'/>"
+    "<title>RBBB server</title>"
+    "<h1>$D$D:$D$D:$D$D\n</h1>"
+    "<h2>Pot Value:$D\n</h2>"
+    "<h2>Temperature:$D\n</h2>"),
       h/10, h%10, m/10, m%10, s/10, s%10, d, temp);
   if (m>0) //software reset every minute.
     resetFunc();
