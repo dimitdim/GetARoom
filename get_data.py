@@ -27,11 +27,19 @@ def parse_data(text):
     return data[1:]
     
 if __name__ == '__main__':
-    node_ips=["http://10.26.66.19","http://10.26.66.29"]
-    elapsed=0
+    f = open('data'+str(time.strftime("%y%m%d%H%M%S"))+'.csv','w')
+    node_ips=["http://10.26.66.29"]
+    names=["Kyle","Dimitar"]
+    f.write('Time')
+    for m in range(len(node_ips)):
+        for n in parse_data(update(node_ips[m])):
+            f.write(','+str(names[m])+'_'+n.partition(':')[0])
+    f.write('\n')
     while True:
-        for m in range(len(node_ips)):
-            print(parse_data(update(node_ips[m])))
+        f.write(str(time.strftime("%H_%M_%S")))
+        for m in node_ips:
+            for n in parse_data(update(m)):
+                f.write(','+n.partition(':')[2])
+        f.write('\n')
         time.sleep(1)
-        elapsed+=1
-        print(elapsed)
+    f.close()
