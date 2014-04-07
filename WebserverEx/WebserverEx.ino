@@ -6,12 +6,13 @@
 // ethernet interface mac address, must be unique on the LAN
 static byte mymac[] = { 0x74,0x69,0x69,0x2D,0x30,0x31 };
 static byte myip[] = { 10,26,26,26 };
-static byte gwip[] = { 10,27,27,1 };
- 
+static byte gwip[] = { 10,26,26,1 };
+static byte dnsip[] = { 10,1,15,56 }; 
+
 byte Ethernet::buffer[500];
 BufferFiller bfill;
 
-#define STATIC 1
+#define STATIC 0
  
 void setup () {
   Serial.begin(57600);
@@ -39,7 +40,7 @@ static word homePage() {
   word h = t / 3600;
   byte m = (t / 60) % 60;
   byte s = t % 60;
-  boolean d = digitalRead(2);
+  int d = analogRead(2);
   bfill = ether.tcpOffset();
   bfill.emit_p(PSTR(
     "HTTP/1.0 200 OK\r\n"
@@ -51,7 +52,7 @@ static word homePage() {
     "<h1>$D$D:$D$D:$D$D</h1>"
     "<h2>Pin 2:$D</h2>"),
       h/10, h%10, m/10, m%10, s/10, s%10, d);
-  if (m>4)
+  if (m>0) //software reset every minute.
     resetFunc();
   return bfill.position();
 }
