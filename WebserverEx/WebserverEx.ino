@@ -59,7 +59,7 @@ static word homePage() {
     "<h2>Pot Value:$D\n</h2>"
     "<h2>Temperature:$D\n</h2>"),
       h/10, h%10, m/10, m%10, s/10, s%10, d, temp);
-  if (m>0) //software reset every minute.
+  if (m>1) //software reset every minute.
     resetFunc();
   return bfill.position();
 }
