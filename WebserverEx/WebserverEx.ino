@@ -51,8 +51,8 @@ static word homePage() {
     "<meta http-equiv='refresh' content='1'/>"
     "<title>RBBB server</title>"
     "<h1>$D$D:$D$D:$D$D</h1>"
-    "<h2>Pot Value:$D</h2>"
-    "<h2>Temperature:$D</h2>"),
+    "<h2>Pot Value:$D\n</h2>"
+    "<h2>Temperature:$D\n</h2>"),
       h/10, h%10, m/10, m%10, s/10, s%10, d, temp);
   if (m>0) //software reset every minute.
     resetFunc();

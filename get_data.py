@@ -3,7 +3,10 @@ from bs4 import BeautifulSoup
 import time
 
 def update():
-    f=urllib2.urlopen("http://10.26.66.19")
+    req = urllib2.Request("http://10.26.66.19")
+    try: f=urllib2.urlopen(req)
+    except URLError, e:
+        print e.reason
     soup=BeautifulSoup(f)
     title=soup.title.string
     alltext=(soup.get_text())
