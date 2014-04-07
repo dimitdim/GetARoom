@@ -4,12 +4,12 @@
 #include <EtherCard.h>
  
 // ethernet interface mac address, must be unique on the LAN
-static byte mymac[] = { 0x74,0x69,0x69,0x2D,0x30,0x31 };
+static byte mymac[] = { 0x74,0x69,0x69,0x2D,0x30,0x30 };
 static byte myip[] = { 10,26,26,26 };
 static byte gwip[] = { 10,26,26,1 };
-static byte dnsip[] = { 10,1,15,56 }; 
+static byte dnsip[] = { 10,1,15,56 };
 
-byte Ethernet::buffer[500];
+byte Ethernet::buffer[500];  
 BufferFiller bfill;
 
 #define STATIC 0
@@ -31,6 +31,10 @@ void setup () {
   ether.printIp("IP:  ", ether.myip);
   ether.printIp("GW:  ", ether.gwip);  
   ether.printIp("DNS: ", ether.dnsip); 
+  ether.printIp("MAC: ", ether.mymac);
+  ether.printIp("Mask:", ether.netmask);
+  ether.printIp("Bdcs:", ether.broadcastip);
+  ether.printIp("DHCP:", ether.dhcpip);
 }
 
 void(* resetFunc )(void)=0;
@@ -48,11 +52,13 @@ static word homePage() {
     "Content-Type: text/html\r\n"
     "Pragma: no-cache\r\n"
     "\r\n"
-    "<meta http-equiv='refresh' content='1'/>"
-    "<title>RBBB server</title>"
-    "<h1>$D$D:$D$D:$D$D</h1>"
-    "<h2>Pot Value:$D</h2>"
-    "<h2>Temperature:$D</h2>"),
+    "<html><meta http-equiv='refresh' content='1'/>"
+    "<head><title>GetARoom</title></head>"
+    "<body><p>"
+    "<h1>Uptime: $D$D:$D$D:$D$D</h1>"
+    "<h1>Pot Value:$D</h1>"
+    "<h1>Temperature:$D</h1>"
+    "</p></body></html>"),
       h/10, h%10, m/10, m%10, s/10, s%10, d, temp);
   if (m>0) //software reset every minute.
     resetFunc();
