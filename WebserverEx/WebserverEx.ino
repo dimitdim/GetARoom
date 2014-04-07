@@ -6,6 +6,7 @@
 // ethernet interface mac address, must be unique on the LAN
 static byte mymac[] = { 0x74,0x69,0x69,0x2D,0x30,0x31 };
 static byte myip[] = { 10,26,26,26 };
+static byte gwip[] = { 10,27,27,1 };
  
 byte Ethernet::buffer[500];
 BufferFiller bfill;
