@@ -1,6 +1,6 @@
 #include <EtherCard.h>
-static byte mymac[] = { 0x74,0x69,0x69,0x2D,0x30,0x17 };
-static byte myip[] = { 10,26,66,15  };
+static byte mymac[] = { 0x74,0x69,0x69,0x2D,0x30,0x23 };
+static byte myip[] = { 10,26,66,39  };
 static byte gwip[] = { 10,26,66,1 };
 static byte dnsip[] = { 10,1,15,56 };
 static byte mask[] = { 255,255,255,0 };

@@ -30,7 +30,7 @@ if __name__ == '__main__':
     f = open('data'+str(time.strftime("%y%m%d%H%M%S"))+'.csv','w')
     node_ips=["http://10.26.66.39"]
     names=["Kyle","Dimitar"]
-    f.write('Time')
+    f.write('Time',)
     for m in range(len(node_ips)):
         for n in parse_data(update(node_ips[m])):
             f.write(','+str(names[m])+'_'+n.partition(':')[0])

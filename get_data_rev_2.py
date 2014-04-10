@@ -35,7 +35,7 @@ class Node:
         Returns the page data tagless.
         """
         try:
-            self.req=requests.get("http://"+self.ip,timeout=0.01)
+            self.req=requests.get("http://"+self.ip,timeout=1)
             self.s=MLStripper()
             a=self.req.text[self.req.text.find('<title>'):self.req.text.find('</title>')]
             self.s.feed(self.req.text.replace(a,'\n'))
@@ -80,12 +80,15 @@ def get_node_config(location):
     return all_nodes
 
 
-def write_csv(nodes):
-    f = open('data'+'_'+str(time.strftime("%y%m%d%H%M%S"))+'.csv','w')
+def write_csv(nodes,freq):
+    print('Collecting every %d seconds' % freq)
+    filename=('data'+'_'+str(time.strftime("%y%m%d%H%M%S"))+'.csv')
+    f = open(filename,'w')
     f.write('Time,')
     for m in nodes:
         for n in parse_data(m.update()): #As it turns out, only nodes connected when this script runs are loaded into CSV.
             f.write(m.name+'_'+n.partition(':')[0]+',')
+            print m.name+'_'+n.partition(':')[0]+','
     f.write('\n')
     try:
         while True:
@@ -94,13 +97,14 @@ def write_csv(nodes):
                 for n in parse_data(m.update()):
                      f.write(','+n.partition(':')[2])
             f.write('\n')
-            time.sleep(1)
+            time.sleep(freq)
             print '.',
     except KeyboardInterrupt:
         print('Data Collection Ended.')
     f.close()
     print('File Closed.')
+    return filename
 
 if __name__ == '__main__':
     nodes = get_node_config('node_config.txt')
-    write_csv(nodes)
+    print(write_csv(nodes,1)+'   created')
