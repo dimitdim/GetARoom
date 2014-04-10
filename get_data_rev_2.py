@@ -90,8 +90,10 @@ def write_csv(nodes,freq):
             f.write(m.name+'_'+n.partition(':')[0]+',')
             print m.name+'_'+n.partition(':')[0]+','
     f.write('\n')
+    state=True
+    start=time.time()
     try:
-        while True:
+        while state:
             f.write(str(time.strftime("%H_%M_%S")))
             for m in nodes:
                 for n in parse_data(m.update()):
@@ -99,6 +101,7 @@ def write_csv(nodes,freq):
             f.write('\n')
             time.sleep(freq)
             print '.',
+            state=os.path.getmtime('node_config.txt')<start
     except KeyboardInterrupt:
         print('Data Collection Ended.')
     f.close()
