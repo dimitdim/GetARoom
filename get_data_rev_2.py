@@ -25,12 +25,6 @@ class Node:
         self.loc=loc
         pass
 
-    def try_connection(self):
-        """
-        Attempts to connect to a node.  Returns true if node is active, false if not accessible.
-        """
-        pass
-
     def to_string(self):
         #Prints the name, ip, and  physical location.
         return '%s is at %s in %s' % (self.name, self.ip, self.loc)
@@ -40,11 +34,18 @@ class Node:
         Grabs the data being displayed on the site using requests.  Uses Requests to download HTML, uses HTML Parser to remove tags.
         Returns the page data tagless.
         """
-        self.req=requests.get("http://"+self.ip)
-        self.s=MLStripper()
-        a=self.req.text[self.req.text.find('<title>'):self.req.text.find('</title>')]
-        self.s.feed(self.req.text.replace(a,'\n'))
-        return self.s.get_data()
+        try:
+            self.req=requests.get("http://"+self.ip,timeout=0.01)
+            self.s=MLStripper()
+            a=self.req.text[self.req.text.find('<title>'):self.req.text.find('</title>')]
+            self.s.feed(self.req.text.replace(a,'\n'))
+            return self.s.get_data()
+        except requests.ConnectionError:
+            return '\n 0,'
+        except requests.HTTPError:
+            return '\n 0,'
+        except requests.Timeout:
+            return '\n 0,'
         
 
 def parse_data(text):
@@ -83,7 +84,7 @@ def write_csv(nodes):
     f = open('data'+'_'+str(time.strftime("%y%m%d%H%M%S"))+'.csv','w')
     f.write('Time,')
     for m in nodes:
-        for n in parse_data(m.update()):
+        for n in parse_data(m.update()): #As it turns out, only nodes connected when this script runs are loaded into CSV.
             f.write(m.name+'_'+n.partition(':')[0]+',')
     f.write('\n')
     try:
