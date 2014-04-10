@@ -1,29 +1,66 @@
+"""
+Second iteration of  the main data collection routine for Kyle and Dimitar's Software Design Project
+"""
+
+
 import requests
 import time
+from HTMLParser import HTMLParser
 
+
+class MLStripper(HTMLParser):
+    def __init__(self):
+        self.reset()
+        self.fed=[]
+    def handle_data(self,d):
+        self.fed.append(d)
+    def get_data(self):
+        return ''.join(self.fed)
+        
 
 class Node:
-    def __init__(self, name, ip):
+    def __init__(self, name, ip,loc):
         self.name = name
         self.ip = ip
+        self.loc=loc
         pass
 
-    def try_connect(self):
+    def try_connection(self):
         """
-        Attempts to connect to the node, and will catch error if node cannot be accessed.
+        Attempts to connect to a node.  Returns true if node is active, false if not accessible.
         """
         pass
 
     def to_string(self):
-        #return ('%s is at %d' % self.name % self.ip)
-        return '%s is at %s' % (self.name, self.ip)
+        #Prints the name, ip, and  physical location.
+        return '%s is at %s in %s' % (self.name, self.ip, self.loc)
 
     def update(self):
         """
-        Grabs the data being displayed on the site using requests
+        Grabs the data being displayed on the site using requests.  Uses Requests to download HTML, uses HTML Parser to remove tags.
+        Returns the page data tagless.
         """
+        self.req=requests.get("http://"+self.ip)
+        self.s=MLStripper()
+        a=self.req.text[self.req.text.find('<title>'):self.req.text.find('</title>')]
+        self.s.feed(self.req.text.replace(a,'\n'))
+        return self.s.get_data()
+        
 
-
+def parse_data(text):
+    """
+    Takes in the plain text resulting from update.
+    Returns the data as a dictionary in sensor:value
+    """
+    indices=[] #Empty list to find all instances of \n
+    data=[]
+    for i in range(len(text)):
+        if text[i] == '\n':
+            indices.append(i)
+    for k in range(len(indices)):
+        data.append(str(text[indices[k-1]+1:indices[k]]))
+    return data[1:]
+        
 def get_node_config(location):
     """
     Reads the config file at the specified location, uses the config file to identify nodes.
@@ -34,18 +71,32 @@ def get_node_config(location):
     for line in text:
         if line[0] != '\n' and '@' in line:
             name = line[0:line.find('@') - 1]
-            ip = line[line.find('@') + 1:]
-            all_nodes.append(Node(name, ip))
+            ip = line[line.find('@') + 1:line.find('#')-1]
+            loc = line[line.find('#')+1:]
+            all_nodes.append(Node(name, ip,loc))
         else:
             pass
-    return nodes
+    return all_nodes
 
 
-def write_csv():
-    pass
-
+def write_csv(nodes):
+    f = open('data'+'_'+str(time.strftime("%y%m%d%H%M%S"))+'.csv','w')
+    f.write('Time,')
+    for m in nodes:
+        for n in parse_data(m.update()):
+            f.write(m.name+'_'+n.partition(':')[0]+',')
+    f.write('\n')
+    try:
+        while True:
+            f.write(str(time.strftime("%H_%M_%S")))
+            for m in nodes:
+                for n in parse_data(m.update()):
+                     f.write(','+n.partition(':')[2])
+            f.write('\n')
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print('Data Collection Ended.')
 
 if __name__ == '__main__':
     nodes = get_node_config('node_config.txt')
-    for i in nodes:
-        print(i.to_string())
+    write_csv(nodes)
