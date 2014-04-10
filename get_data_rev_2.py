@@ -5,6 +5,7 @@ Second iteration of  the main data collection routine for Kyle and Dimitar's Sof
 
 import requests
 import time
+import os.path
 from HTMLParser import HTMLParser
 
 
@@ -102,8 +103,10 @@ def write_csv(nodes,freq):
             time.sleep(freq)
             print '.',
             state=os.path.getmtime('node_config.txt')<start
+        print('Config File Modified')
     except KeyboardInterrupt:
-        print('Data Collection Ended.')
+        pass
+    print('Data Collection Ended.')
     f.close()
     print('File Closed.')
     return filename
