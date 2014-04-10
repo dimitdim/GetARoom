@@ -28,7 +28,7 @@ def parse_data(text):
     
 if __name__ == '__main__':
     f = open('data'+str(time.strftime("%y%m%d%H%M%S"))+'.csv','w')
-    node_ips=["http://10.26.66.29"]
+    node_ips=["http://10.26.66.39"]
     names=["Kyle","Dimitar"]
     f.write('Time')
     for m in range(len(node_ips)):

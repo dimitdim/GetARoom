@@ -4,7 +4,7 @@
 #include <EtherCard.h>
  
 // ethernet interface mac address, must be unique on the LAN
-static byte mymac[] = { 0x74,0x69,0x69,0x2D,0x30,0x30 };
+static byte mymac[] = { 0x74,0x69,0x69,0x2D,0x30,0x20 };
 static byte myip[] = { 10,26,26,26 };
 static byte gwip[] = { 10,26,26,1 };
 static byte dnsip[] = { 10,1,15,56 };
@@ -52,12 +52,13 @@ static word homePage() {
     "Content-Type: text/html\r\n"
     "Pragma: no-cache\r\n"
     "\r\n"
-
-    "<meta http-equiv='refresh' content='1'/>"
-    "<title>RBBB server</title>"
-    "<h1>$D$D:$D$D:$D$D\n</h1>"
-    "<h2>Pot Value:$D\n</h2>"
-    "<h2>Temperature:$D\n</h2>"),
+    "<html><meta http-equiv='refresh' content='1'/>"
+    "<head><title>GetARoom</title></head>"
+    "<body>"
+    "<p><h1>Uptime: $D$D:$D$D:$D$D \n</h1></p>"
+    "<p><h1>Pot Value:$D \n</h1></p>"
+    "<p><h1>Temperature:$D \n</h1></p>"
+    "</body></html>"),
       h/10, h%10, m/10, m%10, s/10, s%10, d, temp);
   if (m>1) //software reset every minute.
     resetFunc();
