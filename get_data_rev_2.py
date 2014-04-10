@@ -94,8 +94,11 @@ def write_csv(nodes):
                      f.write(','+n.partition(':')[2])
             f.write('\n')
             time.sleep(1)
+            print '.',
     except KeyboardInterrupt:
         print('Data Collection Ended.')
+    f.close()
+    print('File Closed.')
 
 if __name__ == '__main__':
     nodes = get_node_config('node_config.txt')
