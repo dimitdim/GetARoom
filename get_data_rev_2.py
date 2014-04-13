@@ -40,28 +40,36 @@ class Node:
             self.s=MLStripper()
             a=self.req.text[self.req.text.find('<title>'):self.req.text.find('</title>')]
             self.s.feed(self.req.text.replace(a,'\n'))
+            #print(self.s.get_data())
             return self.s.get_data()
         except requests.ConnectionError:
-            return '\n 0,'
+            return '\n -1, \n'
         except requests.HTTPError:
-            return '\n 0,'
+            return '\n -1, \n'
         except requests.Timeout:
-            return '\n 0,'
+            return '\n -1, \n'
         
-
-def parse_data(text):
-    """
-    Takes in the plain text resulting from update.
-    Returns the data as a dictionary in sensor:value
-    """
-    indices=[] #Empty list to find all instances of \n
-    data=[]
-    for i in range(len(text)):
-        if text[i] == '\n':
-            indices.append(i)
-    for k in range(len(indices)):
-        data.append(str(text[indices[k-1]+1:indices[k]]))
-    return data[1:]
+    def parse_data(self,text):
+        """
+        Takes in the plain text resulting from update.
+        Returns the data as a dictionary in sensor:value
+        """
+        indices=[] #Empty list to find all instances of \n
+        data=[]
+        for i in range(len(text)):
+            if text[i] == '\n':
+                indices.append(i)
+        for k in range(len(indices)):
+            data.append(str(text[indices[k-1]+1:indices[k]]))
+        return data[1:]
+        
+    def collect_data(self):
+        """
+        Basically calls update and parse in rapid succession.  The two functions were kept separate incase the unparsed data 
+        is ever desired.
+        """
+        return self.parse_data(self.update())
+        
         
 def get_node_config(location):
     """
@@ -81,36 +89,41 @@ def get_node_config(location):
     return all_nodes
 
 
-def write_csv(nodes,freq):
-    print('Collecting every %d seconds' % freq)
+def write_csv_header(nodes):
     filename=('data'+'_'+str(time.strftime("%y%m%d%H%M%S"))+'.csv')
     f = open(filename,'w')
     f.write('Time,')
     for m in nodes:
-        for n in parse_data(m.update()): #As it turns out, only nodes connected when this script runs are loaded into CSV.
+        for n in m.collect_data(): #As it turns out, only nodes connected when this script runs are loaded into CSV.
             f.write(m.name+'_'+n.partition(':')[0]+',')
             print m.name+'_'+n.partition(':')[0]+','
     f.write('\n')
-    state=True
+    return filename
+    
+def write_csv(nodes,filename):    
+    f = open(filename,'a') #Need to catch a permission denied error here, since the file closes when not being written.
+    f.write(str(time.strftime("%H_%M_%S")))
+    for m in nodes:
+        for n in m.collect_data():
+             f.write(','+n.partition(':')[2])
+    f.write('\n')
+    print '.',
+    f.close()
+    return filename
+
+    
+if __name__ == '__main__':
+    nodes = get_node_config('node_config.txt')
+    filename=write_csv_header(nodes)
+    print(filename+'   created')
+    state = True
     start=time.time()
     try:
         while state:
-            f.write(str(time.strftime("%H_%M_%S")))
-            for m in nodes:
-                for n in parse_data(m.update()):
-                     f.write(','+n.partition(':')[2])
-            f.write('\n')
-            time.sleep(freq)
-            print '.',
+            write_csv(nodes,filename)
             state=os.path.getmtime('node_config.txt')<start
+            time.sleep(10)
         print('Config File Modified')
     except KeyboardInterrupt:
         pass
     print('Data Collection Ended.')
-    f.close()
-    print('File Closed.')
-    return filename
-
-if __name__ == '__main__':
-    nodes = get_node_config('node_config.txt')
-    print(write_csv(nodes,1)+'   created')

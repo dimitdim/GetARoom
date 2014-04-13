@@ -46,7 +46,7 @@ static word homePage() {
     "<head><title>GetARoom</title></head>"
     "<body>"
     "<p><h1>Uptime: $D$D:$D$D:$D$D \n</h1></p>"
-    "<p><h1>Pot Value:$D \n</h1></p>"
+    "<p><h1>Brightness:$D \n</h1></p>"
     "<p><h1>Temperature:$D \n</h1></p>"
     "</body></html>"),
       h/10, h%10, m/10, m%10, s/10, s%10, data, temp);
