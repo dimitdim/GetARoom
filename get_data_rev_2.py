@@ -91,7 +91,9 @@ def get_node_config(location):
 
 
 def write_csv_header(nodes):
-    filename=('data'+'_'+str(time.strftime("%y%m%d%H%M%S"))+'.csv')
+    if not os.path.exists('data'+'/'+str(time.strftime("%y%m%d"))):
+        os.makedirs('data'+'/'+str(time.strftime("%y%m%d")))
+    filename=('data'+'/'+str(time.strftime("%y%m%d"))+'/'+str(time.strftime("%H%M%S"))+'.csv')
     f = open(filename,'w')
     f.write('Time,')
     for m in nodes:
