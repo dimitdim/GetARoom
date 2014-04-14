@@ -1,6 +1,6 @@
 #include <EtherCard.h>
-static byte mymac[] = { 0x74,0x69,0x69,0x2D,0x30,0x23 };
-static byte myip[] = { 10,26,66,99  };
+static byte mymac[] = { 0x74,0x69,0x69,0x2D,0x30,0x27 };
+static byte myip[] = { 10,26,66,97  };
 static byte gwip[] = { 10,26,66,1 };
 static byte dnsip[] = { 10,1,15,56 };
 static byte mask[] = { 255,255,255,0 };
@@ -23,6 +23,8 @@ void setup () {
   ether.printIp("Mask: ", ether.netmask);
   ether.printIp("Bdcs: ", ether.broadcastip);
   ether.printIp("DHCP: ", ether.dhcpip);
+  
+  pinMode(9, OUTPUT);
 }
 
 void(* resetFunc )(void)=0;
@@ -42,22 +44,23 @@ static word homePage() {
     "Content-Type: text/html\r\n"
     "Pragma: no-cache\r\n"
     "\r\n"
-    "<html><meta http-equiv='refresh' content='15'/>"
-    "<head><title>GetARoom</title></head>"
-    "<body>"
+    "<html><head><title>GetARoom</title></head><body>"
     "<p><h1>Uptime: $D$D:$D$D:$D$D \n</h1></p>"
     "<p><h1>Brightness:$D \n</h1></p>"
     "<p><h1>Temperature:$D \n</h1></p>"
     "</body></html>"),
       h/10, h%10, m/10, m%10, s/10, s%10, data, temp);
-  
-  if (h>0)
-    resetFunc();
-  
+
   return bfill.position();
 }
 
 void loop () {
   if (ether.packetLoop(ether.packetReceive()))
     ether.httpServerReply(homePage());
+  if ((millis()%5000)>4499)
+    digitalWrite(9, HIGH);
+  else
+    digitalWrite(9, LOW);
+/**  if (millis()>3600000)
+    resetFunc(); **/
 }
