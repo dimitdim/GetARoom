@@ -1,6 +1,6 @@
 #include <EtherCard.h>
-static byte mymac[] = { 0x74,0x69,0x69,0x2D,0x30,0x27 };
-static byte myip[] = { 10,26,66,97  };
+static byte mymac[] = { 0x74,0x69,0x69,0x2D,0x33,0x33 };
+static byte myip[] = { 10,26,66,99  };
 static byte gwip[] = { 10,26,66,1 };
 static byte dnsip[] = { 10,1,15,56 };
 static byte mask[] = { 255,255,255,0 };
@@ -37,6 +37,7 @@ static word homePage() {
   
   int data = analogRead(2);
   int temp = analogRead(3);
+  int sound= analogRead(4);
   
   bfill = ether.tcpOffset();
   bfill.emit_p(PSTR(
@@ -46,10 +47,11 @@ static word homePage() {
     "\r\n"
     "<html><head><title>GetARoom</title></head><body>"
     "<p><h1>Uptime: $D$D:$D$D:$D$D\n</h1></p>"
-    "<p><h1>Brightness:$D\n</h1></p>"
-    "<p><h1>Temperature:$D\n</h1></p>"
+    "<p><h3>Brightness:$D\n</h3></p>"
+    "<p><h3>Temperature:$D\n</h3></p>"
+    "<p><h3>Volume:$D\n</h3></p>"
     "</body></html>"),
-      h/10, h%10, m/10, m%10, s/10, s%10, data, temp);
+      h/10, h%10, m/10, m%10, s/10, s%10, data, temp, sound);
 
   return bfill.position();
 }
@@ -57,7 +59,7 @@ static word homePage() {
 void loop () {
   if (ether.packetLoop(ether.packetReceive()))
     ether.httpServerReply(homePage());
-  if ((millis()%5000)>4499)
+  if ((millis()%1000)>499)
     digitalWrite(9, HIGH);
   else
     digitalWrite(9, LOW);
