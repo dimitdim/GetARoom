@@ -22,7 +22,7 @@ class Node:
         self.name = name
         self.ip   = ip
         self.loc  = loc
-		self.file = None
+        self.file = None
         pass
 
     def to_string(self):
@@ -87,33 +87,33 @@ def get_node_config(location):
     return all_nodes
 
 def write_csv_header(nodes):
-	"""
-	Initialises data files with headers for each active node
-	"""
-	filename=str(time.strftime("%y%m%d%H%M%S"))+'.csv'
+    """
+    Initialises data files with headers for each active node
+    """
+    filename=str(time.strftime("%y%m%d%H%M%S"))+'.csv'
     for node in nodes:
-		if not os.path.exists('data/'+node.loc):
-			os.makedirs('data/'+node.loc)
-		node.file = open('data/'+node.loc+'/'+filename,'w')
-		f = node.file
-		f.write('Stamp,')
-		f.write('Time,')
-		for n in node.collect_data():
-			f.write(n.partition(':')[0]+',')
-		f.write('\n')
+        if not os.path.exists('data/'+node.loc):
+            os.makedirs('data/'+node.loc)
+        node.file = open('data/'+node.loc+'/'+filename,'w')
+        f = node.file
+        f.write('Stamp,')
+        f.write('Time,')
+        for n in node.collect_data():
+            f.write(n.partition(':')[0]+',')
+        f.write('\n')
     return filename
 
 def write_csv(nodes):
-	"""
-	Write sensor data to CSV file
-	"""
+    """
+    Write sensor data to CSV file
+    """
     for node in nodes:
-		f = node.file
-		f.write(str(time.time)+','+str(time.strftime("%H_%M_%S")))
-		for n in node.collect_data():
+        f = node.file
+        f.write(str(time.time)+','+str(time.strftime("%H_%M_%S")))
+        for n in node.collect_data():
              f.write(','+str(int(n.partition(':')[2])))
-		f.write('\n')
-	print '.',
+        f.write('\n')
+    print '.',
 
 def load_array(filename):
     """
@@ -124,23 +124,23 @@ def load_array(filename):
     return data
 
 if __name__ == '__main__':
-	state1 = True
-	while state1:
-		nodes = get_node_config('node_config.txt')
-		print('Nodes Initialised:')
-		for node in nodes:
-			print(node.loc)
-		filename=write_csv_header(nodes)
-		print(filename+' files created')
-		state2 = True
-		start=time.time()
-		try:
-			while state2:
-				write_csv(nodes)
-				state2=os.path.getmtime('node_config.txt')<start
-				time.sleep(10)
-			print('Config File Modified, restarting')
-		except KeyboardInterrupt:
-			state1 = False
-	f.close()
-	print('Data Collection Ended, closing')
+    state1 = True
+    while state1:
+        nodes = get_node_config('node_config.txt')
+        print('Nodes Initialised:')
+        for node in nodes:
+            print(node.loc)
+        filename=write_csv_header(nodes)
+        print(filename+' files created')
+        state2 = True
+        start=time.time()
+        try:
+            while state2:
+                write_csv(nodes)
+                state2=os.path.getmtime('node_config.txt')<start
+                time.sleep(10)
+            print('Config File Modified, restarting')
+        except KeyboardInterrupt:
+            state1 = False
+    f.close()
+    print('Data Collection Ended, closing')
