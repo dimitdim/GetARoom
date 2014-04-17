@@ -70,8 +70,8 @@ class Node:
         is ever desired.
         """
         return self.parse_data(self.update())
-        
-        
+
+
 def get_node_config(location):
     """
     Reads the config file at the specified location, uses the config file to identify nodes.
@@ -89,6 +89,19 @@ def get_node_config(location):
             pass
     return all_nodes
 
+def photo_res(read):
+	"""
+	Converts data from photoresistor-10k divider into 1-100 brightness value
+	"""
+	read=int(read)
+	return int(100*(1023-read)/1023)
+	
+def lm35(read, ref=5000):
+	"""
+	Converts data from an LM35 remperature sensor to degrees centegrade, taking into account Arduino running voltage in mV
+	"""
+	read=int(read)
+	return int(read*ref/10230)
 
 def write_csv_header(nodes):
     if not os.path.exists('data'+'/'+str(time.strftime("%y%m%d"))):
