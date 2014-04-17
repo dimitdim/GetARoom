@@ -1,14 +1,12 @@
 """
-Second iteration of  the main data collection routine for Kyle and Dimitar's Software Design Project
+Third iteration of the main data collection routine for Kyle and Dimitar's Software Design Project GetARoom
 """
-
 
 import requests
 import time
 import os.path
 import numpy as np
 from HTMLParser import HTMLParser
-
 
 class MLStripper(HTMLParser):
     def __init__(self):
@@ -18,13 +16,13 @@ class MLStripper(HTMLParser):
         self.fed.append(d)
     def get_data(self):
         return ''.join(self.fed)
-        
 
 class Node:
     def __init__(self,name,ip,loc):
         self.name = name
-        self.ip = ip
-        self.loc=loc
+        self.ip   = ip
+        self.loc  = loc
+		self.file = None
         pass
 
     def to_string(self):
@@ -71,7 +69,6 @@ class Node:
         """
         return self.parse_data(self.update())
 
-
 def get_node_config(location):
     """
     Reads the config file at the specified location, uses the config file to identify nodes.
@@ -84,48 +81,40 @@ def get_node_config(location):
             name = line[0:line.find('@') - 1]
             ip = line[line.find('@') + 1:line.find('#')-1]
             loc = line[line.find('#')+1:]
-            all_nodes.append(Node(name, ip,loc))
+            all_nodes.append(Node(name,ip,loc))
         else:
             pass
     return all_nodes
 
-def photo_res(read):
-	"""
-	Converts data from photoresistor-10k divider into 1-100 brightness value
-	"""
-	read=int(read)
-	return int(100*(1023-read)/1023)
-	
-def lm35(read, ref=5000):
-	"""
-	Converts data from an LM35 remperature sensor to degrees centegrade, taking into account Arduino running voltage in mV
-	"""
-	read=int(read)
-	return int(read*ref/10230)
-
 def write_csv_header(nodes):
-    if not os.path.exists('data'+'/'+str(time.strftime("%y%m%d"))):
-        os.makedirs('data'+'/'+str(time.strftime("%y%m%d")))
-    filename=('data'+'/'+str(time.strftime("%y%m%d"))+'/'+str(time.strftime("%H%M%S"))+'.csv')
-    f = open(filename,'w')
-    f.write('Time,')
-    for m in nodes:
-        for n in m.collect_data(): #As it turns out, only nodes connected when this script runs are loaded into CSV.
-            f.write(m.name+'_'+n.partition(':')[0]+',')
-    f.write('\n')
+	"""
+	Initialises data files with headers for each active node
+	"""
+	filename=str(time.strftime("%y%m%d%H%M%S"))+'.csv'
+    for node in nodes:
+		if not os.path.exists('data/'+node.loc):
+			os.makedirs('data/'+node.loc)
+		node.file = open('data/'+node.loc+'/'+filename,'w')
+		f = node.file
+		f.write('Stamp,')
+		f.write('Time,')
+		for n in node.collect_data():
+			f.write(n.partition(':')[0]+',')
+		f.write('\n')
     return filename
-    
-def write_csv(nodes,filename):    
-    f = open(filename,'a') #Need to catch a permission denied error here, since the file closes when not being written.
-    f.write(str(time.strftime("%H_%M_%S")))
-    for m in nodes:
-        for n in m.collect_data():
-             f.write(','+n.partition(':')[2])
-    f.write('\n')
-    print '.',
-    f.close()
-    return filename
-    
+
+def write_csv(nodes):
+	"""
+	Write sensor data to CSV file
+	"""
+    for node in nodes:
+		f = node.file
+		f.write(str(time.time)+','+str(time.strftime("%H_%M_%S")))
+		for n in node.collect_data():
+             f.write(','+str(int(n.partition(':')[2])))
+		f.write('\n')
+	print '.',
+
 def load_array(filename):
     """
     Loads CSV data into a numpy array
@@ -134,19 +123,24 @@ def load_array(filename):
     data=np.genfromtext(filename, delimiter=",", autostrip=True, names=True, dtype=int)
     return data
 
-    
 if __name__ == '__main__':
-    nodes = get_node_config('node_config.txt')
-    filename=write_csv_header(nodes)
-    print(filename+'   created')
-    state = True
-    start=time.time()
-    try:
-        while state:
-            write_csv(nodes,filename)
-            state=os.path.getmtime('node_config.txt')<start
-            time.sleep(10)
-        print('Config File Modified')
-    except KeyboardInterrupt:
-        pass
-    print('Data Collection Ended.')
+	state1 = True
+	while state1:
+		nodes = get_node_config('node_config.txt')
+		print('Nodes Initialised:')
+		for node in nodes:
+			print(node.loc)
+		filename=write_csv_header(nodes)
+		print(filename+' files created')
+		state2 = True
+		start=time.time()
+		try:
+			while state2:
+				write_csv(nodes)
+				state2=os.path.getmtime('node_config.txt')<start
+				time.sleep(10)
+			print('Config File Modified, restarting')
+		except KeyboardInterrupt:
+			state1 = False
+	f.close()
+	print('Data Collection Ended, closing')

@@ -35,8 +35,10 @@ static word homePage() {
   byte m = (t / 60) % 60;
   byte s = t % 60;
   
-  int data = analogRead(2);
-  int temp = analogRead(3);
+  int data =100*(1023-analogRead(2))/1023;
+  /**int data =100*analogRead(2)/1023;**/
+  int ref=5000
+  int temp = int(analogRead(3)*ref/10230);
   int sound= analogRead(4);
   
   bfill = ether.tcpOffset();
