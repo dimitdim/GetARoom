@@ -6,6 +6,7 @@ Second iteration of  the main data collection routine for Kyle and Dimitar's Sof
 import requests
 import time
 import os.path
+#import numpy
 from HTMLParser import HTMLParser
 
 
@@ -43,11 +44,11 @@ class Node:
             #print(self.s.get_data())
             return self.s.get_data()
         except requests.ConnectionError:
-            return '\n -1, \n'
+            return '\n'
         except requests.HTTPError:
-            return '\n -1, \n'
+            return '\n'
         except requests.Timeout:
-            return '\n -1, \n'
+            return '\n'
         
     def parse_data(self,text):
         """
@@ -90,7 +91,9 @@ def get_node_config(location):
 
 
 def write_csv_header(nodes):
-    filename=('data'+'_'+str(time.strftime("%y%m%d%H%M%S"))+'.csv')
+    if not os.path.exists('data'+'/'+str(time.strftime("%y%m%d"))):
+        os.makedirs('data'+'/'+str(time.strftime("%y%m%d")))
+    filename=('data'+'/'+str(time.strftime("%y%m%d"))+'/'+str(time.strftime("%H%M%S"))+'.csv')
     f = open(filename,'w')
     f.write('Time,')
     for m in nodes:
@@ -110,6 +113,12 @@ def write_csv(nodes,filename):
     print '.',
     f.close()
     return filename
+    
+def write_array():
+    """
+    Writes a numpy array instead of a plain ol' CSV.
+    """
+    pass
 
     
 if __name__ == '__main__':
