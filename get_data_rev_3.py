@@ -5,7 +5,7 @@ Third iteration of the main data collection routine for Kyle and Dimitar's Softw
 import requests
 import time
 import os.path
-import numpy as np
+#import numpy as np
 from HTMLParser import HTMLParser
 
 class MLStripper(HTMLParser):
@@ -80,7 +80,7 @@ def get_node_config(location):
         if line[0] != '\n' and '@' in line:
             name = line[0:line.find('@') - 1]
             ip = line[line.find('@') + 1:line.find('#')-1]
-            loc = line[line.find('#')+1:]
+            loc = line[line.find('#')+1:line.find('\n')]
             all_nodes.append(Node(name,ip,loc))
         else:
             pass
@@ -96,10 +96,9 @@ def write_csv_header(nodes):
             os.makedirs('data/'+node.loc)
         node.file = open('data/'+node.loc+'/'+filename,'w')
         f = node.file
-        f.write('Stamp,')
-        f.write('Time,')
+        f.write('Stamp,Time')
         for n in node.collect_data():
-            f.write(n.partition(':')[0]+',')
+            f.write(','+n.partition(': ')[0])
         f.write('\n')
     return filename
 
@@ -109,19 +108,19 @@ def write_csv(nodes):
     """
     for node in nodes:
         f = node.file
-        f.write(str(time.time)+','+str(time.strftime("%H_%M_%S")))
+        f.write(str(time.time())+','+str(time.strftime("%H_%M_%S")))
         for n in node.collect_data():
-             f.write(','+str(int(n.partition(':')[2])))
+             f.write(','+n.partition(': ')[2])
         f.write('\n')
     print '.',
 
-def load_array(filename):
-    """
-    Loads CSV data into a numpy array
-    Don't use this.
-    """
-    data=np.genfromtext(filename, delimiter=",", autostrip=True, names=True, dtype=int)
-    return data
+#def load_array(filename):
+#    """
+#    Loads CSV data into a numpy array
+#    Don't use this.
+#    """
+#    data=np.genfromtext(filename, delimiter=",", autostrip=True, names=True, dtype=int)
+#    return data
 
 if __name__ == '__main__':
     state1 = True
@@ -142,5 +141,6 @@ if __name__ == '__main__':
             print('Config File Modified, restarting')
         except KeyboardInterrupt:
             state1 = False
-    f.close()
+    for node in nodes:
+        node.file.close()
     print('Data Collection Ended, closing')
