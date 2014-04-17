@@ -6,7 +6,7 @@ Second iteration of  the main data collection routine for Kyle and Dimitar's Sof
 import requests
 import time
 import os.path
-#import numpy
+import numpy as np
 from HTMLParser import HTMLParser
 
 
@@ -99,7 +99,6 @@ def write_csv_header(nodes):
     for m in nodes:
         for n in m.collect_data(): #As it turns out, only nodes connected when this script runs are loaded into CSV.
             f.write(m.name+'_'+n.partition(':')[0]+',')
-            print m.name+'_'+n.partition(':')[0]+','
     f.write('\n')
     return filename
     
@@ -114,11 +113,13 @@ def write_csv(nodes,filename):
     f.close()
     return filename
     
-def write_array():
+def load_array(filename):
     """
-    Writes a numpy array instead of a plain ol' CSV.
+    Loads CSV data into a numpy array
+    Don't use this.
     """
-    pass
+    data=np.genfromtext(filename, delimiter=",", autostrip=True, names=True, dtype=int)
+    return data
 
     
 if __name__ == '__main__':
