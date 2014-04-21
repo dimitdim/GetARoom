@@ -2,14 +2,14 @@
 Data analysis routines
 """
 import numpy as np
-import matplotlib.pyplot as mpl
+import pylab as mpl
 
 def load_csv(filename):
     """
     Loads a CSV into an array.
     """
-    data=np.genfromtxt(filename,delimiter=",",autostrip=True, dtype=int)
-    return [data[:,0],data[:,1]]
+    data=np.genfromtxt(filename,delimiter=",",autostrip=True, dtype=float)
+    return [data[:,0],data[:,3]]
 
 
 def parse_time(time):
@@ -36,12 +36,10 @@ def parse_vals(vals):
         
     
     
-def analyze_light(time,data):
+def analyze_light(data):
     """
     Looks at light sensor data and guesses if the light is either on or off.
     Returns an equal length data set that maps each value to true or false.
-    """
-    """
     Process:
     Determine state at T=0 (lights on?  Lights off?)
     Numerically differentiate dataset while tracking state.  Store min/max values.
@@ -50,28 +48,28 @@ def analyze_light(time,data):
     If the numerical derivative value is over a certain threshold, flag a state change.
     Return a dataset that lists the state as a function of time.
     This routine should optimally be self calibrating.
-    
     """
     light_state=np.zeros(len(data))
-    grad=abs(np.gradient(data)) #Careful on units, this is not taken with respect to another variable.
-    max_deriv=np.amax(grad)
+    grad1=abs(np.gradient(data)) #Careful on units, this is not taken with respect to another variable.
+    max_deriv=np.amax(grad1)
     max_val=np.amax(data)
     threshold=max_deriv/2
     
     state=data[0]>0.5*max_val
     
-    for k in range(len(grad)-1):
+    for k in range(len(grad1)-1):
         light_state[k]=100*int(state)
-        area_avg=np.mean(data[k-5:k])
-        print area_avg
-        if grad[k]>threshold:
+        if grad1[k]>threshold:
             state= (abs(data[k]-max_val)<data[k])
-    return [grad,light_state]
+    #print(grad1)
+    #grad1=np.convolve(np.array([1,-1,1,-1,1,-1,1,-1,1,-1]),grad1)
+    return [grad1,light_state]
         
 if __name__=='__main__':
-    a=load_csv('testdata.csv')
-    g=analyze_light([0],parse_vals(a[1]))
-    mpl.plot(a[0],a[1])
-    mpl.plot(a[0],g[0])
-    mpl.plot(a[0],g[1])
+    a=load_csv('140417060703.csv')
+    g=analyze_light(parse_vals(a[1]))
+    mpl.plot(a[0],a[1],label='Raw Data')
+    mpl.plot(a[0],g[0],label='1st derivative')
+    mpl.plot(a[0],g[1],label='Light State')
+    mpl.legend(loc='upper right')
     mpl.show()
