@@ -1,7 +1,7 @@
 #include <EtherCard.h>
 static byte mymac[] = { 0x74,0x69,0x69,0x2D,0x33,0x35 };
-static byte myip[] = { 10,26,65,99  };
-static byte gwip[] = { 10,26,65,1 };
+static byte myip[] = { 10,27,65,99  };
+static byte gwip[] = { 10,27,65,1 };
 static byte dnsip[] = { 10,1,15,56 };
 static byte mask[] = { 255,255,255,0 };
 
@@ -35,10 +35,15 @@ static word homePage() {
   byte m = (t / 60) % 60;
   byte s = t % 60;
   
-  int data =100*(1023-analogRead(2))/1023;
+  long ldata = (1023-analogRead(2));
+  ldata = ldata*100;
+  ldata = ldata/1023;
+  int data = ldata;
   /**int data =100*analogRead(2)/1023;**/
-  int ref=5000
-  int temp = int(analogRead(3)*ref/10230);
+  long ref=5000;
+  long ltemp = analogRead(3)*ref;
+  ltemp = ltemp/10230;
+  int temp = ltemp;
   int sound= analogRead(4);
   
   bfill = ether.tcpOffset();

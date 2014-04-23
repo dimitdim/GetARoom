@@ -39,7 +39,6 @@ class Node:
             self.s=MLStripper()
             a=self.req.text[self.req.text.find('<title>'):self.req.text.find('</title>')]
             self.s.feed(self.req.text.replace(a,'\n'))
-            #print(self.s.get_data())
             return self.s.get_data()
         except requests.ConnectionError:
             return '\n'
@@ -98,7 +97,7 @@ def write_csv_header(nodes):
         f = node.file
         f.write('Stamp,Time')
         for n in node.collect_data():
-            f.write(','+n.partition(': ')[0])
+            f.write(','+n.partition(':')[0])
         f.write('\n')
     return filename
 
@@ -110,7 +109,7 @@ def write_csv(nodes):
         f = node.file
         f.write(str(time.time())+','+str(time.strftime("%H_%M_%S")))
         for n in node.collect_data():
-             f.write(','+n.partition(': ')[2])
+             f.write(','+n.partition(':')[2])
         f.write('\n')
     print '.',
 
