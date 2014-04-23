@@ -25,18 +25,29 @@ class MLStripper(HTMLParser):
         return ''.join(self.fed)
 
 class Node(Base):
-    __tablename__="Nodes"
-    time=Column(Integer, primary_key=True)
+    __tablename__="node"
+    id_node=Column(Integer,primary_key=True)
     name=Column(String)
+    
+    def __init__(self,name,ip,loc):
+        self.name = name
+        self.ip = ip
+        self.loc  = loc
+    
+class Data(Base):
+    __tablename__="data"
+    
+    id_data=Column(Integer,primary_key=True)
+    
     brightness=Column(Integer)
     sound=Column(Integer)
     ir=Column(Integer)
     temperature=Column(Integer)
 
-    def __init__(self,name,ip,loc):
-        self.name = name
-        self.ip   = ip
-        self.loc  = loc
+    node_id=Column(Integer,ForeignKey("node.id_node"))
+    node=relationship("Node",backref=backref("data",order_by=id_data))
+    
+    def __init__(self):
         self.brightness=0
         self.sound=0
         self.ir=0
@@ -108,29 +119,9 @@ if __name__ == '__main__':
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
     session=Session()
-    node1=Node('dummy','0,0,0','here')
-    session.add(node1)
-    session.commit()
+    nodes=Node("Room1","0.0.0.0","Here")
     
     
-    # state1 = True
-    # while state1:
-        # nodes = get_node_config('node_config.txt')
-        # print('Nodes Initialised:')
-        # for node in nodes:
-            # print(node.loc)
-        # filename=write_csv_header(nodes)
-        # print(filename+' files created')
-        # state2 = True
-        # start=time.time()
-        # try:
-            # while state2:
-                # write_csv(nodes)
-                # state2=os.path.getmtime('node_config.txt')<start
-                # time.sleep(10)
-            # print('Config File Modified, restarting')
-        # except KeyboardInterrupt:
-            # state1 = False
-    # for node in nodes:
-        # node.file.close()
-    # print('Data Collection Ended, closing')
+    
+    # session.commit()
+    

@@ -22,6 +22,7 @@ class Album(Base):
     release_date=Column(Date)
     publisher = Column(String)
     media_type = Column(String)
+
     
     artist_id = Column(Integer, ForeignKey("artists.id"))
     artist = relationship("Artist",backref=backref("albums",order_by=id))
