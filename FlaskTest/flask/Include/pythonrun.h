@@ -106,6 +106,7 @@ PyAPI_FUNC(char *) Py_GetExecPrefix(void);
 PyAPI_FUNC(char *) Py_GetPath(void);
 
 /* In their own files */
+PyAPI_FUNC(const char *) Anaconda_GetVersion(void);
 PyAPI_FUNC(const char *) Py_GetVersion(void);
 PyAPI_FUNC(const char *) Py_GetPlatform(void);
 PyAPI_FUNC(const char *) Py_GetCopyright(void);
@@ -128,6 +129,7 @@ PyAPI_FUNC(int) _PyInt_Init(void);
 PyAPI_FUNC(int) _PyLong_Init(void);
 PyAPI_FUNC(void) _PyFloat_Init(void);
 PyAPI_FUNC(int) PyByteArray_Init(void);
+PyAPI_FUNC(void) _PyRandom_Init(void);
 
 /* Various internal finalizers */
 PyAPI_FUNC(void) _PyExc_Fini(void);
@@ -171,6 +173,8 @@ typedef void (*PyOS_sighandler_t)(int);
 PyAPI_FUNC(PyOS_sighandler_t) PyOS_getsig(int);
 PyAPI_FUNC(PyOS_sighandler_t) PyOS_setsig(int, PyOS_sighandler_t);
 
+/* Random */
+PyAPI_FUNC(int) _PyOS_URandom (void *buffer, Py_ssize_t size);
 
 #ifdef __cplusplus
 }
