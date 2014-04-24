@@ -5,6 +5,8 @@ Third iteration of the main data collection routine for Kyle and Dimitar's Softw
 import requests
 import time
 import os.path
+import random
+
 from HTMLParser import HTMLParser
 
 from sqlalchemy import create_engine, ForeignKey
@@ -13,45 +15,49 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.orm import sessionmaker
 
-Base=declarative_base()
+Base = declarative_base()
+
 
 class MLStripper(HTMLParser):
     def __init__(self):
         self.reset()
-        self.fed=[]
-    def handle_data(self,d):
+        self.fed = []
+
+    def handle_data(self, d):
         self.fed.append(d)
+
     def get_data(self):
         return ''.join(self.fed)
 
+
 class Node(Base):
-    __tablename__="node"
-    id_node=Column(Integer,primary_key=True)
-    name=Column(String)
-    
-    def __init__(self,name,ip,loc):
+    __tablename__ = "node"
+    # id = Column(Integer, primary_key=True)
+    name = Column(String,primary_key=True)
+
+    def __init__(self, name, ip, loc):
         self.name = name
         self.ip = ip
-        self.loc  = loc
-    
-class Data(Base):
-    __tablename__="data"
-    
-    id_data=Column(Integer,primary_key=True)
-    
-    brightness=Column(Integer)
-    sound=Column(Integer)
-    ir=Column(Integer)
-    temperature=Column(Integer)
+        self.loc = loc
 
-    node_id=Column(Integer,ForeignKey("node.id_node"))
-    node=relationship("Node",backref=backref("data",order_by=id_data))
-    
+
+class Data(Base):
+    __tablename__ = "data"
+
+    id = Column(Integer, primary_key=True)
+    brightness = Column(Integer)
+    volume = Column(Integer)
+    ir = Column(Integer)
+    temperature = Column(Integer)
+
+    node_name = Column(Integer, ForeignKey("node.name"))
+    node = relationship("Node", backref=backref("data", order_by=id))
+
     def __init__(self):
-        self.brightness=0
-        self.sound=0
-        self.ir=0
-        self.temperature=0
+        self.brightness = random.random()
+        self.volume = random.random()
+        self.ir = random.random()
+        self.temperature = random.random()
 
     def to_string(self):
         #Prints the name, ip, and  physical location.
@@ -63,38 +69,23 @@ class Data(Base):
         Returns the page data tagless.
         """
         try:
-            self.req=requests.get("http://"+self.ip,timeout=1)
-            self.s=MLStripper()
-            a=self.req.text[self.req.text.find('<title>'):self.req.text.find('</title>')]
-            self.s.feed(self.req.text.replace(a,'\n'))
-            return self.s.get_data()
+            self.req = requests.get("http://" + self.ip, timeout=1)
+            self.s = MLStripper()
+            a = self.req.text[self.req.text.find('<title>'):self.req.text.find('</title>')]
+            self.s.feed(self.req.text.replace(a, '\n'))
+            self.text = self.s.get_data()
+
+            value_type = ['Brightness', 'Temperature', 'Volume']
+            for v in value_type:
+                index = self.text.find(v)
+
         except requests.ConnectionError:
             return '\n'
         except requests.HTTPError:
             return '\n'
         except requests.Timeout:
             return '\n'
-        
-    def parse_data(self,text):
-        """
-        Takes in the plain text resulting from update.
-        Returns the data as a dictionary in sensor:value
-        """
-        indices=[] #Empty list to find all instances of \n
-        data=[]
-        for i in range(len(text)):
-            if text[i] == '\n':
-                indices.append(i)
-        for k in range(len(indices)):
-            data.append(str(text[indices[k-1]+1:indices[k]]))
-        return data[1:]
-        
-    def collect_data(self):
-        """
-        Basically calls update and parse in rapid succession.  The two functions were kept separate incase the unparsed data 
-        is ever desired.
-        """
-        return self.parse_data(self.update())
+
 
 def get_node_config(location):
     """
@@ -106,22 +97,26 @@ def get_node_config(location):
     for line in text:
         if line[0] != '\n' and '@' in line:
             name = line[0:line.find('@') - 1]
-            ip = line[line.find('@') + 1:line.find('#')-1]
-            loc = line[line.find('#')+1:line.find('\n')]
-            all_nodes.append(Node(name,ip,loc))
+            ip = line[line.find('@') + 1:line.find('#') - 1]
+            loc = line[line.find('#') + 1:line.find('\n')]
+            all_nodes.append(Node(name, ip, loc))
         else:
             pass
     return all_nodes
 
 
 if __name__ == '__main__':
-    engine = create_engine('sqlite:///SensorData.db',echo=True)
+    engine = create_engine('sqlite:///SensorData.db', echo=True)
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
-    session=Session()
-    nodes=Node("Room1","0.0.0.0","Here")
-    
-    
-    
-    # session.commit()
-    
+    session = Session()
+    nodes = get_node_config('node_config.txt')  #Load nodes from configuration file
+    while True:
+        try:
+            for n in nodes:
+                n.data = [Data()]  #The plan is for the __init__ method of data to call the update function and assign the values to one data object.
+                session.add(n)
+            session.commit()
+            time.sleep(1)
+        except KeyboardInterrupt:
+            print('Canceled by user.')
