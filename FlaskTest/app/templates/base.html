@@ -1,0 +1,26 @@
+<html>
+<head><title>
+	{% if title %}
+	{{title}} - 
+	{% endif %}
+	GetARoom
+</title></head>
+<body>
+
+<div id="navbar" style="width:95%;heigth=70px"><h3>
+	<span style="float:left"><a href="/index">GetARoom</a></span>
+	<span style="float:right">Welcome, {{user.nick}}</span>
+	<hr>
+</h3></div>
+<hr>
+
+{% block content %}{% endblock %}
+
+<div id="statbar" style="position:fixed;width:95%;bottom:0px"><h4>
+	<hr>
+	<span style="float:left">Dimitar and Kyle are pretty cool</span>
+	<span style="float:right">{{time}}</span>
+</h4></div>
+
+</body>
+</html>
