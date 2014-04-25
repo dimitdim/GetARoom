@@ -17,10 +17,12 @@ def index():
 def login():
 	form = LoginForm()
 	title = 'Sign In'
+	providers = app.config['OPENID_PROVIDERS']
 	if form.validate_on_submit():
-		flash('OpenID: '+form.openid.data+'\nremember_me: '+str(form.remember_me.data))
+		flash('OpenID: '+form.openid.data)
+		flash('Cookie: '+str(form.remember_me.data))
 		return redirect('/index')
-	return render_template("login.html", title=title, form=form, user=user, time=tim)
+	return render_template("login.html", title=title, form=form, user=user, time=tim, providers=providers)
 
 @app.route('/css')
 def css():
