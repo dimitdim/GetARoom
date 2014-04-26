@@ -5,67 +5,52 @@ Model that defines the class structure of the database.
 """
 
 #Loosely based on all that stuff below this line.  Use those to start.
+#Replacing Base with db.model
 
-import requests
-import time
-import os.path
 import random
-
-from HTMLParser import HTMLParser
-
-from sqlalchemy import create_engine, ForeignKey
-from sqlalchemy import Column, Date, Integer, String
+import requests
+from sqlalchemy import ForeignKey
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy.orm import sessionmaker
+from app import db
+
 
 Base = declarative_base()
 
 
-class MLStripper(HTMLParser):
-    def __init__(self):
-        self.reset()
-        self.fed = []
-
-    def handle_data(self, d):
-        self.fed.append(d)
-
-    def get_data(self):
-        return ''.join(self.fed)
-
-
-class Node(Base):
+class Node(db.model):
     __tablename__ = "node"
-    # id = Column(Integer, primary_key=True)
-    name = Column(String,primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    ip = db.Column(db.String)
+    loc = db.Column(db.String)
+    data = db.relationship('Data',backref = 'author', lazy = 'dynamic')
 
     def __init__(self, name, ip, loc):
         self.name = name
         self.ip = ip
         self.loc = loc
 
+    def __repr__(self):
+        return '%s is at %s in %s' % (self.name, self.ip, self.loc)
+
 
 class Data(Base):
     __tablename__ = "data"
 
-    id = Column(Integer, primary_key=True)
-    brightness = Column(Integer)
-    volume = Column(Integer)
-    ir = Column(Integer)
-    temperature = Column(Integer)
-
-    node_name = Column(Integer, ForeignKey("node.name"))
-    node = relationship("Node", backref=backref("data", order_by=id))
+    id = Column(db.Integer, primary_key=True)
+    brightness = Column(db.Integer)
+    volume = Column(db,Integer)
+    ir = Column(db,Integer)
+    temperature = Column(db.Integer)
+    node_id = Column(db.Integer, db.ForeignKey("node.id"))
 
     def __init__(self):
         self.brightness = random.random()
         self.volume = random.random()
         self.ir = random.random()
         self.temperature = random.random()
-
-    def to_string(self):
-        #Prints the name, ip, and  physical location.
-        return '%s is at %s in %s' % (self.name, self.ip, self.loc)
 
     def update(self):
         """
