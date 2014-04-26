@@ -4,20 +4,17 @@ __author__ = 'kflores'
 Model that defines the class structure of the database.
 """
 
-#Loosely based on all that stuff below this line.  Use those to start.
-#Replacing Base with db.model
 
 import random
 from app import db
 
 
 class Node(db.model):
-    __tablename__ = "node"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     ip = db.Column(db.String)
     loc = db.Column(db.String)
-    data = db.relationship('Data',backref = 'author', lazy = 'dynamic')
+    data = db.relationship('Data', backref='author', lazy='dynamic')
 
     def __init__(self, name, ip, loc):
         self.name = name
@@ -28,9 +25,7 @@ class Node(db.model):
         return '%s is at %s in %s' % (self.name, self.ip, self.loc)
 
 
-class Data(Base):
-    __tablename__ = "data"
-
+class Data(db.model):
     id = db.Column(db.Integer, primary_key=True)
     brightness = db.Column(db.Integer)
     volume = db.Column(db.Integer)
