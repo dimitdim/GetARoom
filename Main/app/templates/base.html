@@ -14,6 +14,16 @@
 	<hr>
 </h3></div>
 
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul>
+	{%for message in messages %}
+	<li>{{ message }}</li>
+	{% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
 {% block content %}{% endblock %}
 
 <div id="statbar" style="position:fixed;width:95%;bottom:0px"><h4>
