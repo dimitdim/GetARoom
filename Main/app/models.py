@@ -25,6 +25,7 @@ class Node(db.Model):
 
 class Data(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    localtimestamp = db.Column(db.Integer, index=True, unique=True)
     uptime = db.Column(db.Integer)
     brightness = db.Column(db.Integer)
     temperature = db.Column(db.Integer)
@@ -33,7 +34,8 @@ class Data(db.Model):
     last_opened = db.Column(db.Integer)
     node_id = db.Column(db.Integer, db.ForeignKey("node.id"))
 
-    def __init__(self, uptime, brightness, temperature, volume, door, last_opened, origin):
+    def __init__(self, localtimestamp, uptime, brightness, temperature, volume, door, last_opened, origin):
+        self.localtimestamp = localtimestamp
         self.uptime = uptime
         self.brightness = brightness
         self.temperature = temperature
