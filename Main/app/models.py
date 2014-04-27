@@ -4,8 +4,6 @@ __author__ = 'kflores'
 Model that defines the class structure of the database.
 """
 
-
-import random
 from app import db
 
 
@@ -35,13 +33,13 @@ class Data(db.Model):
     last_opened = db.Column(db.Integer)
     node_id = db.Column(db.Integer, db.ForeignKey("node.id"))
 
-    def __init__(self,uptime,brightness,temperature,volume,door,last_opened):
-	self.uptime = uptime
-	self.brightness = brightness
-	self.temperature = temperature
-	self.volume = volume
-	self.door = door
-	self.last_opened = last_opened
+    def __init__(self, uptime, brightness, temperature, volume, door, last_opened):
+        self.uptime = uptime
+        self.brightness = brightness
+        self.temperature = temperature
+        self.volume = volume
+        self.door = door
+        self.last_opened = last_opened
 
     def __repr__(self):
-	    return "Light: %s, Temp: %s, Last: %s" % (self.brightness,self.temperature,self.last_opened)
+        return "Light: %s, Temp: %s, Last: %s" % (self.brightness, self.temperature, self.last_opened)
