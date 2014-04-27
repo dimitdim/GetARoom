@@ -25,7 +25,7 @@ class Node(db.Model):
 
 class Data(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    uptime = db.Column(db.BigInteger)
+    uptime = db.Column(db.Integer)
     brightness = db.Column(db.Integer)
     temperature = db.Column(db.Integer)
     volume = db.Column(db.Integer)
