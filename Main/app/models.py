@@ -33,13 +33,14 @@ class Data(db.Model):
     last_opened = db.Column(db.Integer)
     node_id = db.Column(db.Integer, db.ForeignKey("node.id"))
 
-    def __init__(self, uptime, brightness, temperature, volume, door, last_opened):
+    def __init__(self, uptime, brightness, temperature, volume, door, last_opened, origin):
         self.uptime = uptime
         self.brightness = brightness
         self.temperature = temperature
         self.volume = volume
         self.door = door
         self.last_opened = last_opened
+	self.origin = origin
 
     def __repr__(self):
         return "Light: %s, Temp: %s, Last: %s" % (self.brightness, self.temperature, self.last_opened)
