@@ -44,4 +44,4 @@ class Data(db.Model):
 	self.last_opened = last_opened
 
     def __repr__(self):
-	    return "Light: %s, Temp: %s, Last: %s" % (serl;f.brightness,self.temperature,self.last_opened)
+	    return "Light: %s, Temp: %s, Last: %s" % (self.brightness,self.temperature,self.last_opened)
