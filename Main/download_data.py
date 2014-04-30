@@ -58,10 +58,10 @@ def update_database():
             print(n)
     for k in models.Node.query.all():
         d = update(k.ip)
-        if len(d) == 4:
+        if type(d) == dict:
             data = models.Data(time.time(),d['uptime'], d['brightness'], d['temperature'], d['volume'], 0, 0, k)
         else:
-            data = models.Data(0, 0, 0, 0, 0, 0, 0, k)
+            data = models.Data(0, 0, 0, 0, 0, 0, 0, k) #Write empty data if connection fails.
         db.session.add(data)
     db.session.commit()
 

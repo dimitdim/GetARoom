@@ -54,7 +54,7 @@ static word homePage() {
     "Pragma: no-cache\r\n"
     "\r\n"
     "<html><head><title>GetARoom</title></head><body>"
-    "<p><h1>{'uptime': '$D$D:$D$D:$D$D','brightness':$D,'temperature':$D,'volume':$D</h1></p>"
+    "<p><h1>{'uptime': '$D$D:$D$D:$D$D','brightness':$D,'temperature':$D,'volume':$D}</h1></p>"),
       h/10, h%10, m/10, m%10, s/10, s%10, data, temp, sound);
 
   return bfill.position();
