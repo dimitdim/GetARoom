@@ -26,7 +26,7 @@ class Node(db.Model):
 class Data(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     localtimestamp = db.Column(db.Integer, index=True, unique=True)
-    uptime = db.Column(db.Integer)
+    uptime = db.Column(db.String)
     brightness = db.Column(db.Integer)
     temperature = db.Column(db.Integer)
     volume = db.Column(db.Integer)
@@ -42,7 +42,7 @@ class Data(db.Model):
         self.volume = volume
         self.door = door
         self.last_opened = last_opened
-	self.origin = origin
+        self.origin = origin
 
     def __repr__(self):
         return "Light: %s, Temp: %s, Last: %s" % (self.brightness, self.temperature, self.last_opened)

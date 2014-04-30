@@ -1,6 +1,7 @@
 from app import db, models
 import requests
 import ast
+import time
 
 
 def update(ip):
@@ -10,8 +11,8 @@ def update(ip):
     Example string on page: {'uptime': '00:00:02','brightness':156,'temperature':23,'volume':491}
     """
     try:
-        req = requests.get("http://" + ip, timeout=1)
-        out_dict = ast.literal_eval(req.text)
+        req = requests.get("http://" + ip, timeout=5)
+        out_dict = ast.literal_eval(req.text[req.text.find('{'):req.text.find('}')+1])
         return out_dict
     except requests.ConnectionError:
         return 'error'
@@ -57,9 +58,10 @@ def update_database():
             print(n)
     for k in models.Node.query.all():
         d = update(k.ip)
-        # data = models.Data(d['uptime'], d['brightness'], d['temperature'], d['volume'], 0, 0, k)
-        #Uncomment and fix the above line when downloading and parsing pages works again!
-        data = models.Data(1,2,3,4,5,6,k)
+        if len(d) == 4:
+            data = models.Data(time.time(),d['uptime'], d['brightness'], d['temperature'], d['volume'], 0, 0, k)
+        else:
+            data = models.Data(0, 0, 0, 0, 0, 0, 0, k)
         db.session.add(data)
     db.session.commit()
 
