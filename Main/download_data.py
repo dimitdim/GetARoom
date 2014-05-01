@@ -2,6 +2,7 @@ from app import db, models
 import requests
 import ast
 import time
+import os.path
 
 
 def update(ip):
@@ -40,40 +41,54 @@ def get_node_config(location):
     return all_nodes
 
 
-def check_node_exist(node_object):
+def check_node_exist(new_nodes):
     """
     Checks a node location and checks if that node already exists in the database.  Returns true or false.
     """
-    nodes = models.Node.query.all()
-    for n in nodes:
-        if n.loc == node_object.loc:
-            return True
-    return False
+    all_nodes = models.Node.query.all()
+    all_node_loc=[]
+    for node in all_nodes:
+        all_node_loc.append(node.loc)
+    for n in range(len(new_nodes)):
+	node=new_nodes[n]
+        if node.loc in all_node_loc:
+	    node_old=models.Node.query.filter_by(loc=node.loc).first()
+	    node_old.name=node.name
+	    node_old.ip=node.ip
+            new_nodes[n]=node_old
+	else:
+            db.session.add(node)
+    db.session.commit()
 
-
-def update_database():
-    for n in get_node_config('node_config.txt'):
-        if not check_node_exist(n):  #Basically, if the node does not already exist, create it now.
-            db.session.add(n)
-            print(n)
-            db.session.commit()  #This commit needs to be here to add a node if it doesn't exist, and so that it shows up in the next step
-    for k in models.Node.query.all():
-        d = update(k.ip)
-        d_field = {'uptime': -1, 'brightness': -1, 'temperature': -1, 'volume': -1, 'door': -1, 'last_opened': -1}
+def update_database(nodes):
+    for node in nodes:
+        d = update(node.ip)
+        d_field = {'uptime': -1, 'brightness': -1, 'temperature': -1, 'volume': -1, 'door': -1, 'last': -1}
         if type(d) == dict:
             for key in d_field:
                 if key in d:
                     d_field[key] = d[key]
-            else:
-                pass
-            data = models.Data(time.time(), d_field['uptime'], d_field['brightness'], d_field['temperature'],
-                               d_field['volume'], d_field['door'], d_field['last_opened'], k)
-            #All the values being passed into data are going to be integers
-        else:
-            data = models.Data(-1, -1, -1, -1, -1, -1, -1, k)  #Write empty data if connection fails.
+        data = models.Data(time.time(), d_field['uptime'], d_field['brightness'], d_field['temperature'], d_field['volume'], d_field['door'], d_field['last'], node) #All the values being passed into data are going to be integers
         db.session.add(data)
     db.session.commit()
+    print '.',
 
 
 if __name__ == '__main__':
-    update_database()
+    state1 = True
+    while state1:
+        nodes = get_node_config('node_config.txt')
+        check_node_exist(nodes)  #Basically, if the node does not already exist, create it now.
+        print('Nodes Initialised:')
+	for node in nodes: print(node.id)
+        state2 = True
+        start=time.time()
+        try:
+            while state2:
+                update_database(nodes)
+                state2=os.path.getmtime('node_config.txt')<start
+                time.sleep(10)
+            print('Config File Modified, restarting')
+        except KeyboardInterrupt:
+            state1 = False
+    print('Data Collection Ended, closing')

@@ -1,4 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Test, {{user.name}}!</h1>
+<h2>Hello, {{user.nickname}}!</h2>
+<ul>
+{% for node in nodes %}
+<li><a href=/node/{{ node.id }}>{{ node.name }} ({{ node.loc }})</a></li>
+{% endfor %}
+</ul>
 {% endblock %}

@@ -29,6 +29,7 @@ p {
 	}
 p, td, th, ul {
 	font-size: 80%;
+	list-style-type: none;
 }
 
 /* LAYOUT */
@@ -74,13 +75,13 @@ h1 a:hover span {
 	opacity:			1;
 	border-bottom:		0px;
 }
-h2 {
+/*h2 {
 	font: bold 100% arial, verdana, sans-serif;
 	color: #3B578B;
 	border-bottom: 1px solid #ccc;
 	padding-bottom: 3px;
 	margin: 25px 0 10px 0;
-}
+}*/
 p+p {
 	padding-top: 1em;
 }

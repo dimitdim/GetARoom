@@ -27,7 +27,7 @@ class Node(db.Model):
 
 class Data(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    localtimestamp = db.Column(db.Integer, index=True, unique=True)
+    localtimestamp = db.Column(db.Integer)
     uptime = db.Column(db.Integer)
     brightness = db.Column(db.Integer)
     temperature = db.Column(db.Integer)

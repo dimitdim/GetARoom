@@ -1,2 +1,1 @@
-Node1 @10.25.9.99 #library_studyRM
-Node2 @10.25.9.90 #library_studyRM2
+Library Study Room @10.25.9.90 #L159

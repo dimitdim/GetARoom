@@ -1,8 +1,10 @@
 *.py[cod]
-*.py.swp
+*.swp
 *~
 flask
 oldstuff
+Main/tmp
+Main/app.db
 
 # C extensions
 *.so

@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="css" type="text/css" />
+<link rel="stylesheet" href="/css" type="text/css" />
 <html>
 <head><title>
 	{% if title %}
@@ -8,12 +8,12 @@
 </title></head>
 <body>
 
-<div id="navbar" style="width:95%;heigth=70px"><h3>
+<div id="navbar" style="width:95%;heigth=70px"><h4>
 	<a href="/index">GetARoom</a>
 	{% if g.user.is_authenticated() %}
 	<span style="float:right">Welcome, {{user.nickname}} | <a href="{{ url_for('logout') }}">Logout</a></span>{% endif %}
 	<hr>
-</h3></div>
+</h4></div>
 
 {% with messages = get_flashed_messages() %}
 {% if messages %}
@@ -27,11 +27,11 @@
 
 {% block content %}{% endblock %}
 
-<div id="statbar" style="position:fixed;width:95%;bottom:0px"><h4>
+<div id="statbar" style="position:fixed;width:95%;bottom:0px"><h5>
 	<hr>
 	<span style="float:left">Dimitar and Kyle are pretty cool</span>
 	<span style="float:right">{{time}}</span>
-</h4></div>
+</h5></div>
 
 </body>
 </html>
