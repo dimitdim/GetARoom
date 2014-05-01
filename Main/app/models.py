@@ -28,7 +28,7 @@ class Node(db.Model):
 class Data(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     localtimestamp = db.Column(db.Integer, index=True, unique=True)
-    uptime = db.Column(db.String)
+    uptime = db.Column(db.Integer)
     brightness = db.Column(db.Integer)
     temperature = db.Column(db.Integer)
     volume = db.Column(db.Integer)
@@ -51,28 +51,45 @@ class Data(db.Model):
 
 
 class User(db.Model):
-	id = db.Column(db.Integer, primary_key = True)
-	nickname = db.Column(db.String(64), index = True, unique = True)
-	email = db.Column(db.String(120), index = True, unique = True)
-	role = db.Column(db.SmallInteger, default = ROLE_USER)
-	posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
-	
-	def is_authenticated(self):
-		return True
-	def is_active(self):
-		return True
-	def is_anonymous(self):
-		return False
-	def get_id(self):
-		return unicode(self.id)
-	def __repr__(self):
-		return '<User %r>' % (self.nickname)
+    id = db.Column(db.Integer, primary_key=True)
+    nickname = db.Column(db.String(64), index=True, unique=True)
+    email = db.Column(db.String(120), index=True, unique=True)
+    role = db.Column(db.SmallInteger, default=ROLE_USER)
+    posts = db.relationship('Post', backref='author', lazy='dynamic')
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return unicode(self.id)
+
+    def __repr__(self):
+        return '<User %r>' % (self.nickname)
+
 
 class Post(db.Model):
-	id = db.Column(db.Integer, primary_key = True)
-	body = db.Column(db.String(140))
-	timestamp = db.Column(db.DateTime)
-	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String(140))
+    timestamp = db.Column(db.DateTime)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-	def __repr__(self):
-		return '<Post %r>' % (self.body)
+    def __repr__(self):
+        return '<Post %r>' % (self.body)
+
+
+class Status(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    start = db.Column(db.Integer)
+    status = db.Column(db.Boolean)
+    node_id = db.Column(db.Integer, db.ForeignKey("node.id"))
+
+    def __init__(self, start, status, origin):
+        self.start = start
+        self.status = status
+        self.origin = origin

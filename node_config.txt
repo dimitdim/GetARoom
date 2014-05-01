@@ -1,2 +1,0 @@
-Node1 @10.25.9.99 #library_studyRM
-Node2 @10.27.65.99 #rm_wh104

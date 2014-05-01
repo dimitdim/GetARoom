@@ -12,7 +12,7 @@ def update(ip):
     """
     try:
         req = requests.get("http://" + ip, timeout=5)
-        out_dict = ast.literal_eval(req.text[req.text.find('{'):req.text.find('}')+1])
+        out_dict = ast.literal_eval(req.text[req.text.find('{'):req.text.find('}') + 1])
         return out_dict
     except requests.ConnectionError:
         return 'error'
@@ -56,14 +56,24 @@ def update_database():
         if not check_node_exist(n):  #Basically, if the node does not already exist, create it now.
             db.session.add(n)
             print(n)
+            db.session.commit()  #This commit needs to be here to add a node if it doesn't exist, and so that it shows up in the next step
     for k in models.Node.query.all():
         d = update(k.ip)
+        d_field = {'uptime': -1, 'brightness': -1, 'temperature': -1, 'volume': -1, 'door': -1, 'last_opened': -1}
         if type(d) == dict:
-            data = models.Data(time.time(),d['uptime'], d['brightness'], d['temperature'], d['volume'], 0, 0, k)
+            for key in d_field:
+                if key in d:
+                    d_field[key] = d[key]
+            else:
+                pass
+            data = models.Data(time.time(), d_field['uptime'], d_field['brightness'], d_field['temperature'],
+                               d_field['volume'], d_field['door'], d_field['last_opened'], k)
+            #All the values being passed into data are going to be integers
         else:
-            data = models.Data(0, 0, 0, 0, 0, 0, 0, k) #Write empty data if connection fails.
+            data = models.Data(-1, -1, -1, -1, -1, -1, -1, k)  #Write empty data if connection fails.
         db.session.add(data)
     db.session.commit()
+
 
 if __name__ == '__main__':
     update_database()
