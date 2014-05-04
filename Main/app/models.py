@@ -10,6 +10,8 @@ ROLE_USER = 0
 ROLE_ADMIN = 1
 
 class Node(db.Model):
+    """class representation of one networked sensor kit hooked into ethernet.  Instatiation requires the name, ip address, and location of the "node", but all of these values should be placed into the config file (see get_node_config(filename) in download_data.py)
+    """
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     ip = db.Column(db.String)
@@ -26,6 +28,9 @@ class Node(db.Model):
 
 
 class Data(db.Model):
+    """
+    Class representation of one data row in the datatable.  This object records the local time, node uptime, brightness, temperature, door IR sensor, and the time the door was last opened.  Volume is a dummy variable for feature that is not yet implemented.  node_id ties the Data objects to the node object that created them (the location they are at)
+    """
     id = db.Column(db.Integer, primary_key=True)
     localtimestamp = db.Column(db.Integer)
     uptime = db.Column(db.Integer)
@@ -84,6 +89,9 @@ class Post(db.Model):
 
 
 class Status(db.Model):
+    """
+    Object for storing room status values.  An analysis routine that processes sensor data and reaches a conclusion on room state will instatiate these objects.  WIP.
+    """
     id = db.Column(db.Integer, primary_key=True)
     start = db.Column(db.Integer)
     status = db.Column(db.Boolean)
