@@ -8,7 +8,8 @@ while True:
         last=(data.localtimestamp+(data.last_opened-data.uptime)/1000)
         stat=models.Status.query.filter_by(node_id=node.id).order_by('start desc').first()
         if stat == None or stat.start != last:
+            print 'hi'
             new=models.Status(last,1,node)
             db.session.add(new)
-            db.session.commit
+            db.session.commit()
     time.sleep(10)

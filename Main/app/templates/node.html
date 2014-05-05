@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>
 {% if data %}
+<h2>
 <p><u>{{ data.origin.name }} ({{ data.origin.loc }})</u></p>
 <p>Status: <font color={% if data.brightness<511 %}"green">VACANT{% else %}"red">OCCUPIED{% endif %}</font></p>
 <p>Last Updated: {{ meas }}</p> 
@@ -12,9 +12,20 @@ Temperature: {% if user.temp=='f' %}{{ (32+1.8*(data.temperature*500/1023))|int 
 {% if data.door > 550 %}Open
 {% else %}Closed{% endif %}<br>
 Door Last Opened: {{ door }}</p>
-{% else %}
-<p>No data. Sorry!</p>
-{% endif %}
 </h2>
+<h3>
+<p><u>Recent History</u></p>
+
+<ul>
+{% for n in range(ln) %}
+<li>{{ stimes[n] }} {{ statuses[n].start }}: <font color={% if statuses[n].status==1 %}"green">VACANT{% else %}"red">OCCUPIED{% endif %}</font></li>
+{% endfor %}
+</ul>
+</h3>
 <p>{{ data.origin }}.</p>
+{% else %}
+<h2>
+<p>No data. Sorry!</p>
+</h2>
+{% endif %}
 {% endblock %}

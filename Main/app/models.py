@@ -17,6 +17,7 @@ class Node(db.Model):
     ip = db.Column(db.String)
     loc = db.Column(db.String, index=True, unique=True)
     data = db.relationship('Data', backref='origin', lazy='dynamic')
+    #status = db.relationship('Status', backref='origin', lazy='dynamic')
 
     def __init__(self, name, ip, loc):
         self.name = name

@@ -2,7 +2,7 @@
 {% block content %}
 <h2>Hello, {{user.nickname}}!</h2>
 <h3>
-<p>Available Data:</p>
+<u><p>Available Data:</p></u>
 <ul>
 {% for node in nodes %}
 <li><a href=/node/{{ node.id }}>{{ node.name }} ({{ node.loc }})</a></li>

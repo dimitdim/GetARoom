@@ -52,13 +52,17 @@ def node(id):
 	node=Node.query.filter_by(id=id).first()
 	title=node.loc
 	data=Data.query.filter_by(node_id=id).order_by('localtimestamp desc').first()
-	status=Status.query.filter_by(node_id=id).order_by('start desc').first()
+	statuses=Status.query.filter_by(node_id=id).order_by('start desc').limit(10).all()
+	stimes=[]
+	for status in statuses:
+		stimes.append(time.ctime(status.start))
+	ln=len(statuses)
 	meas=None
 	door=None
 	if data:
 		meas=time.ctime(data.localtimestamp)
 		door=time.ctime(data.localtimestamp+(data.last_opened-data.uptime)/1000)
-	return render_template("node.html",title=title,user=g.user,time=g.time,data=data,meas=meas,door=door,status=status)
+	return render_template("node.html",title=title,user=g.user,time=g.time,data=data,meas=meas,door=door,statuses=statuses,stimes=stimes,ln=ln)
 
 @app.route('/login', methods = ['GET','POST'])
 @oid.loginhandler
@@ -74,6 +78,7 @@ def login():
 		session['remember_me']=form.remember_me.data
 		return oid.try_login(form.openid.data, ask_for = ['nickname', 'email'])
 	return render_template("login.html", title=title, form=form, user=g.user, time=g.time, providers=providers)
+
 @app.route('/logout')
 def logout():
 	logout_user()
