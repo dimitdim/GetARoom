@@ -43,12 +43,14 @@ def css():
 @app.route('/index')
 @login_required
 def index():
-	title = 'test'
+	title = 'Node List'
 	nodes=Node.query.all()
 	return render_template("index.html", title=title, user=g.user, time=g.time, nodes=nodes)
 @app.route('/node/<id>')
+@login_required
 def node(id):
-	title='node'
+	node=Node.query.filter_by(id=id).first()
+	title=node.loc
 	data=Data.query.filter_by(node_id=id).order_by('localtimestamp desc').first()
 	status=Status.query.filter_by(node_id=id).order_by('start desc').first()
 	meas=None
