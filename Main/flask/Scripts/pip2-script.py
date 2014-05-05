@@ -1,4 +1,4 @@
-#!C:\Users\ddimitrov\Documents\GitHub\GetARoom\Main\flask\Scripts\python.exe
+#!C:\Users\Mitko\Documents\GitHub\GetARoom\Main\flask\Scripts\python.exe
 # EASY-INSTALL-ENTRY-SCRIPT: 'pip==1.5.4','console_scripts','pip2'
 __requires__ = 'pip==1.5.4'
 import sys

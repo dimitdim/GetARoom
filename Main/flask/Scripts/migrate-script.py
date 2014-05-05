@@ -1,4 +1,4 @@
-#!C:\Users\ddimitrov\Documents\GitHub\GetARoom\Main\flask\Scripts\python.exe
+#!C:\Users\Mitko\Documents\GitHub\GetARoom\Main\flask\Scripts\python.exe
 # EASY-INSTALL-ENTRY-SCRIPT: 'sqlalchemy-migrate==0.7.2','console_scripts','migrate'
 __requires__ = 'sqlalchemy-migrate==0.7.2'
 import sys

@@ -1,4 +1,4 @@
-#!C:\Users\ddimitrov\Documents\GitHub\GetARoom\Main\flask\Scripts\python.exe
+#!C:\Users\Mitko\Documents\GitHub\GetARoom\Main\flask\Scripts\python.exe
 # EASY-INSTALL-ENTRY-SCRIPT: 'Babel==1.3','console_scripts','pybabel'
 __requires__ = 'Babel==1.3'
 import sys
