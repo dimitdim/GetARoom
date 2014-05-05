@@ -7,7 +7,7 @@
 <p>Updated: {{ meas }}</p> 
 <p>Brightness: {{ (data.brightness*100/1023)|int }}%<br>
 Temperature: {{ (data.temperature*500/1023)|int }}&degC<br>
-Volume: {{ (data.volume*100/1023)|int }}%</p>
+<!--Volume: {{ (data.volume*100/1023)|int }}%</p>-->
 <p>Door: 
 {% if data.door > 550 %}Open
 {% else %}Closed{% endif %}<br>
