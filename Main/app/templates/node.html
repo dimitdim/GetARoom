@@ -2,11 +2,11 @@
 {% block content %}
 <h2>
 {% if data %}
-<p>Hi. {{ data.origin }}.</p>
-<p>Status: <font color={% if data.brightness<511 %}"green">OPEN{% else %}"red">CLOSED{% endif %}</font></p>
-<p>Updated: {{ meas }}</p> 
+<p><u>{{ data.origin.name }} ({{ data.origin.loc }})</u></p>
+<p>Status: <font color={% if data.brightness<511 %}"green">VACANT{% else %}"red">OCCUPIED{% endif %}</font></p>
+<p>Last Updated: {{ meas }}</p> 
 <p>Brightness: {{ (data.brightness*100/1023)|int }}%<br>
-Temperature: {{ (data.temperature*500/1023)|int }}&degC<br>
+Temperature: {% if user.temp=='f' %}{{ (32+1.8*(data.temperature*500/1023))|int }}&degF{% else %}{{ (data.temperature*500/1023)|int }}&degC{% endif %}<br>
 <!--Volume: {{ (data.volume*100/1023)|int }}%</p>-->
 <p>Door: 
 {% if data.door > 550 %}Open
@@ -16,4 +16,5 @@ Door Last Opened: {{ door }}</p>
 <p>No data. Sorry!</p>
 {% endif %}
 </h2>
+<p>{{ data.origin }}.</p>
 {% endblock %}

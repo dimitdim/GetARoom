@@ -69,8 +69,8 @@ def login():
 	title = 'Sign In'
 	providers = app.config['OPENID_PROVIDERS']
 	if form.validate_on_submit():
-		flash('OpenID: '+form.openid.data)
-		flash('Cookie: '+str(form.remember_me.data))
+	#	flash('OpenID: '+form.openid.data)
+	#	flash('Cookie: '+str(form.remember_me.data))
 		session['remember_me']=form.remember_me.data
 		return oid.try_login(form.openid.data, ask_for = ['nickname', 'email'])
 	return render_template("login.html", title=title, form=form, user=g.user, time=g.time, providers=providers)
@@ -78,3 +78,13 @@ def login():
 def logout():
 	logout_user()
 	return redirect(url_for('index'))
+@app.route('/c')
+def c():
+    g.user.temp='c'
+    db.session.commit()
+    return redirect(request.args.get('next') or url_for('index'))
+@app.route('/f')
+def f():
+    g.user.temp='f'
+    db.session.commit()
+    return redirect(request.args.get('next') or url_for('index'))
