@@ -11,7 +11,7 @@
 <div id="navbar" style="width:95%;heigth=70px"><h4>
 	<a href="/index">GetARoom</a>
 	{% if g.user.is_authenticated() %}
-	<span style="float:right">Welcome, {{user.nickname}} | <a href="{{ url_for('logout') }}">Logout</a></span>{% endif %}
+	<span style="float:right">Welcome, {{user.nickname}} | {% if user.temp=='f' %}<a href="{{ url_for('c') }}">&degC</a>&nbsp&nbsp&degF{% else %}&degC&nbsp&nbsp<a href="{{ url_for('f') }}">&degF</a>{% endif %} | <a href="{{ url_for('logout') }}">Logout</a></span>{% endif %}
 	<hr>
 </h4></div>
 
@@ -29,7 +29,7 @@
 
 <div id="statbar" style="position:fixed;width:95%;bottom:0px"><h5>
 	<hr>
-	<span style="float:left">Dimitar and Kyle are pretty cool</span>
+	<span style="float:left">Olin College | Software Design | Spring 2014</span>
 	<span style="float:right">{{time}}</span>
 </h5></div>
 
