@@ -1,7 +1,7 @@
 #include <EtherCard.h>
-static byte mymac[] = { 0x74,0x69,0x69,0x2D,0x24,0x24 };
-static byte myip[] = { 10,25,9,90  };
-static byte gwip[] = { 10,25,9,1 };
+static byte mymac[] = { 0x74,0x69,0x69,0x2D,0x24,0x32 };
+static byte myip[] = { 10,26,66,99  };
+static byte gwip[] = { 10,26,66,1 };
 static byte dnsip[] = { 10,1,15,56 };
 static byte mask[] = { 255,255,255,0 };
 
@@ -52,18 +52,22 @@ static word homePage() {
 
 void loop () {
   time = millis();
-  light = 1023-analogRead(2);
+  light = analogRead(2);
   temp = analogRead(3);
   sound= analogRead(4);
   door = analogRead(5);
-  if (door>550)
+  if (door>800)
     last = millis();
   
   if ((millis()%1000)>499)
     digitalWrite(9, HIGH);
   else
     digitalWrite(9, LOW);
-  
+  Serial.print("door=");
+  Serial.println(door);
+  Serial.print("last=");
+  Serial.println(last);
+  delay(10);
   if (ether.packetLoop(ether.packetReceive()))
     ether.httpServerReply(homePage());
   /**if (millis()>3600000)

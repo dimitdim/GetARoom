@@ -1,6 +1,9 @@
 from app import db,models
 import sys
 
+"""
+A script for importing CSV data from our past data collection routines into the current SQL database
+"""
 inp=sys.argv
 node=models.Node(inp[1],inp[2],inp[3])
 db.session.add(node)

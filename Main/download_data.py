@@ -43,7 +43,8 @@ def get_node_config(location):
 
 def check_node_exist(new_nodes):
     """
-    Checks a node location and checks if that node already exists in the database.  Returns true or false.
+    Checks a node location and checks if that node already exists in the database. If the node already exists, a new one will not be created in the database.  This function is designed to ensure that nodes are unique by their named location: if a node has the same location but a different IP, the IP will be then overwritten. 
+
     """
     all_nodes = models.Node.query.all()
     all_node_loc=[]
@@ -61,6 +62,9 @@ def check_node_exist(new_nodes):
     db.session.commit()
 
 def update_database(nodes):
+    """
+    This function takes the nodes to update as an input, usually obtained from query.all.  it will iterate through the nodes, pull data from them, and instantiate the appropriate data objects before storing the data objects to the database.  No return value, but '.' printouts in terminal to show that its working.
+    """
     for node in nodes:
         d = update(node.ip)
         d_field = {'uptime': -1, 'brightness': -1, 'temperature': -1, 'volume': -1, 'door': -1, 'last': -1}
