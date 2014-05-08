@@ -14,15 +14,24 @@
 \section*{Final Design Refinement}
 \subsection*{Flow and Method}
 %\FloatBarrier
-%\begin{figure}[ht!]
-%\centering
+\begin{figure}[ht!]
+\centering
 %\includegraphics[width=5in]{flowpicture.png}
-%\caption{Graphical representation of the flow of information through our system.}
+\includegraphics{flowpicture}
+\caption{Graphical representation of the flow of information through our system.}
 %\FloatBarrier
+\end{figure}
 
 \subsection*{Data Structures}
+\par Most data was stored in SQLAlchemy objects.  While the program is running, active nodes are stored in lists.  Input data comes in the form of a dictionary.
 
 \subsection*{UML Diagram}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics{UML}
+\caption{UML diagram for SQL classes and Flask Login Manager}
+\end{figure}
 
 \section*{Results}
 \par The product we presented during the class demo-day was something we were proud to put our names on. Because we reached our minimum deliverable relatively early in the project, our product incorporated some of the features we scoped out intially as extensions, and shows some refinement rtowards our design criteria
@@ -38,6 +47,7 @@
 Although in a software project, it is also possible to add more features, improve source maintainability, or beautify UI elements, we were satisfied with what we accomplished in the time alotted, considering also that we had a hardware component to work with, and learned to work with SQL and Flask independently.
 
 \section*{Design Reflection}
+\par We divided the system into very appropriate functinoal blocks, which made integration relatively easy.  We also ended up using very appropriate tools for each, namely Flask and SQLAlecemy.  Moving from CSV files to SQL for databasing was one of the best decisions we made.  In the future, however, we're thinking about changing the way communication works - namely having the Arduino's POST as opposed to the code GETing so that the system can be exported to an external server.
 
 \section*{Division of Labor}
 \par The first step of our project, networking hardware, was difficult to work on in parallel because all downstream elements depended on it. Until we had the Arduino sensor kits installed and network enabled, we could not write data acquisition scripts and it was difficult to determine how to create reasonable databases. We were able to write different aspects of the data acquistion routine in parallel however. The downloading from a webpage, webpage parsing, and data storage could be written independently provieded the input and output formats were known, which we did a decent job of documenting and keeping consistent. We later moved on to writing SQL models and the Flask app in parallel until the two were mature enough to be integrated. While this project was relatively large in scope for two people, our small team size ended up being appropriate.
