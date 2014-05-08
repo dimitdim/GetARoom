@@ -43,33 +43,33 @@
       
       <h2>Design</h2>
       Updated Proposal:
-<p>0. Hardware:</p>
-<p>We have an ambient light sensor and a temperature sensor attached to an Arduino</p>
-<p>We will have a microphone with an envelope filter attached, time permitting</p>
-<p>We also have a proximity sensor attached, which detects the opening of a door</p>
-<p>We have a status LED attached as well</p>
-<p>We’re using an ENC28J60 card for ethernet</p>
-<p>Time permitting, we may reduce the price per kit by programming ATMega’s instead of Arduino’s and using ENC28J60 chips</p>
-<p>1. Arduino Code</p>
-<p>The Arduino code uses an ENC28J60 to host a website displaying data and hardware uptime</p>
-<p>Data includes readings from the temperature and light sensors converted to degrees and percent respectively.  They will also include ambient sound data</p>
-<p>Data also includes current status of door and time (in terms of hardware uptime) door last detected to be open</p>
-<p>2. Data Collection</p>
-<p>Nodes are initialised according to a configuration file</p>
-<p>In the future, this file will be updated with a DHCP-assigned IP when a new sensor kit is started</p>
-<p>Every 10 seconds, the current hosted website is downloaded and parsed for data values</p>
-<p>3. Data Storage</p>
-<p>We are in the process of rewriting our data storage routines to store information to an SQLite      database using the Python library SQL Alchemy.  SQLite allows us to store out data more robustly and with tighter organization than trying to categorize massive data sets into folders and CSVs.</p>
-<p>4. Data Analysis</p>
-<p>Every time the door is opened, the status of the room is analysed</p>
-<p>If there is a significant increase and/or a rapid fluctuation of any of the parameters, the status of the room is set to occupied</p>
-<p>If there is a significant decrease in any of the parameters, the status is set to vacant</p>
-<p>If none of the parameters change significantly, the status does not change either</p>
-<p>Statuses only change at open-door times</p>
-<p>We will survey use of rooms for a period of time to validate and tune our algorithm</p>
-<p>5. Frontend</p>
-<p>We use the Flask library for python to host a website on a server in my room</p>
-<p>In the future, we will talk to IT for campus server space (ideally) or figure out a way to integrate using Heroku with the LAN-connected hardware</p>
+<p>0. Hardware:</p><li>
+<ul>We have an ambient light sensor and a temperature sensor attached to an Arduino</ul>
+<ul>We will have a microphone with an envelope filter attached, time permitting</ul>
+<ul>We also have a proximity sensor attached, which detects the opening of a door</ul>
+<ul>We have a status LED attached as well</ul>
+<ul>We’re using an ENC28J60 card for ethernet</ul>
+<ul>Time permitting, we may reduce the price per kit by programming ATMega’s instead of Arduino’s and using ENC28J60 chips</ul></li>
+<p>2. Arduino Code</p><li>
+<ul>The Arduino code uses an ENC28J60 to host a website displaying data and hardware uptime</ul>
+<ul>Data includes readings from the temperature and light sensors converted to degrees and percent respectively.  They will also include ambient sound data</ul>
+<ul>Data also includes current status of door and time (in terms of hardware uptime) door last detected to be open</ul>
+<p>2. Data Collection</p><li></li>
+<ul>Nodes are initialised according to a configuration file</ul>
+<ul>In the future, this file will be updated with a DHCP-assigned IP when a new sensor kit is started</ul>
+<ul>Every 10 seconds, the current hosted website is downloaded and parsed for data values</ul></li>
+<p>3. Data Storage</p><li>
+<ul>We are in the process of rewriting our data storage routines to store information to an SQLite database using the Python library SQL Alchemy.  SQLite allows us to store out data more robustly and with tighter organization than trying to categorize massive data sets into folders and CSVs.</ul></li>
+<p>4. Data Analysis</p><li>
+<ul>Every time the door is opened, the status of the room is analysed</ul>
+<ul>If there is a significant increase and/or a rapid fluctuation of any of the parameters, the status of the room is set to occupied</ul>
+<ul>If there is a significant decrease in any of the parameters, the status is set to vacant</ul>
+<ul>If none of the parameters change significantly, the status does not change either</ul>
+<ul>Statuses only change at open-door times</ul>
+<ul>We will survey use of rooms for a period of time to validate and tune our algorithm</ul></li>
+<p>5. Frontend</p><li>
+<ul>We use the Flask library for python to host a website on a server in my room</ul>
+<ul>In the future, we will talk to IT for campus server space (ideally) or figure out a way to integrate using Heroku with the LAN-connected hardware</ul></li>
 
       
       
