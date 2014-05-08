@@ -31,13 +31,47 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-      <h2>Links</h2>
-      <h3><a href="https://docs.google.com/document/d/1XqwbS0nbhY-89CKTdPoBsaQof-MWE5jspwaSRCgRpH8">Project Proposal</a></h3>
-      <h3><a href="https://docs.google.com/document/d/1EIUV2HfcXrYcEzB0XpcB_Kv9Uznn88EUObJyYLNKKzU">Design Proposal</a></h3>
-      <h3><a href="https://docs.google.com/document/d/1fQppdKd-Fxv6u_mto1ZbKzABxRzXUcUUh_YaYY6hT1k">Design Refinement</a></h3>
-      <h2>Updates</h2>
-      <h3>Day 1</h3>
-      <p>We did stuff</p>
+
+      <h2>Project Proposal</h2>
+      <p><u>Team Members:</u> This group has only two team members, Dimitar Dimitrov, and Kyle Flores.  Both members are in the 3:20 to 5:00 section, and will meet during that class period.</p>
+      <p><u>Project Summary:</u> We plan to create a sensing network capable of determining whether or not a room is use.  The system should be designed such that new sensing nodes (rooms) can be easily added to the network.  Users should be able to access the system remotely and see if a room is in use, or not in use, saving users the (admittedly short) walk only to find a room occupied.  To preserve the privacy of people using the rooms, only true/false data on room usage should be collected and stored.  Additionally, the software will be presented in a user friendly interface.</p>
+      <p><u>Minimum deliverable:</u> Software that informs the user whether a light is on in a remote room.</p>
+      <p><u>Extensions:</u>  There are multiple possible extensions for this project that involve improving sensing capabilities or analyzing sensor data.  Additional sensors, such as temperature or sound sensors, can be added to the package.  Temperature readings could detect for example, if a window has been left open in the middle of winter, leaving the room undesirable.  Sound sensors can help differentiate between the presence of humans, and a forgotten light, if the most basic sensor package is assumed to be only light sensitive.  After the software has existed for a long enough period of time, it can be used to predict usage patterns based on known trends.  Finally, sensor data can be mapped to usage patterns to help optimize room characteristics (such as temperature) based on likelihood of use at a given time.  Finally, the software interface can be made remotely accessible and be given a aesthetically pleasing interface</p>
+      <p><u>First step:</u> We should start this project by developing a simple sensor package to determine if a room is in use, or not in use.  This will likely involve detecting if the light is on or off (aided by the fact that most rooms at Olin have auto lights off), and if there is a high sound volume.  Other instruments can later be added, but we would probably start with these.</p>
+      <p><u>Biggest problem:</u> Hardware sensing and networking.  One option is to use RasPi’s with the onion.io client to aid with networking</p>
+      <p><u>GitHub:</u> https://github.com/dimitdim/GetARoom</p>
+      
+      <h2>Design</h2>
+      Updated Proposal:
+<p>0. Hardware:</p>
+<p>We have an ambient light sensor and a temperature sensor attached to an Arduino</p>
+<p>We will have a microphone with an envelope filter attached, time permitting</p>
+<p>We also have a proximity sensor attached, which detects the opening of a door</p>
+<p>We have a status LED attached as well</p>
+<p>We’re using an ENC28J60 card for ethernet</p>
+<p>Time permitting, we may reduce the price per kit by programming ATMega’s instead of Arduino’s and using ENC28J60 chips</p>
+<p>1. Arduino Code</p>
+<p>The Arduino code uses an ENC28J60 to host a website displaying data and hardware uptime</p>
+<p>Data includes readings from the temperature and light sensors converted to degrees and percent respectively.  They will also include ambient sound data</p>
+<p>Data also includes current status of door and time (in terms of hardware uptime) door last detected to be open</p>
+<p>2. Data Collection</p>
+<p>Nodes are initialised according to a configuration file</p>
+<p>In the future, this file will be updated with a DHCP-assigned IP when a new sensor kit is started</p>
+<p>Every 10 seconds, the current hosted website is downloaded and parsed for data values</p>
+<p>3. Data Storage</p>
+<p>We are in the process of rewriting our data storage routines to store information to an SQLite      database using the Python library SQL Alchemy.  SQLite allows us to store out data more robustly and with tighter organization than trying to categorize massive data sets into folders and CSVs.</p>
+<p>4. Data Analysis</p>
+<p>Every time the door is opened, the status of the room is analysed</p>
+<p>If there is a significant increase and/or a rapid fluctuation of any of the parameters, the status of the room is set to occupied</p>
+<p>If there is a significant decrease in any of the parameters, the status is set to vacant</p>
+<p>If none of the parameters change significantly, the status does not change either</p>
+<p>Statuses only change at open-door times</p>
+<p>We will survey use of rooms for a period of time to validate and tune our algorithm</p>
+<p>5. Frontend</p>
+<p>We use the Flask library for python to host a website on a server in my room</p>
+<p>In the future, we will talk to IT for campus server space (ideally) or figure out a way to integrate using Heroku with the LAN-connected hardware</p>
+
+      
       
 <!--      
         <h3>
