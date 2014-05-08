@@ -19,6 +19,17 @@
 \par This product uses a mix of Python data structures to move data internally. For example, the Arduino hosted webpages format sensor values in a string that looks like a dictionary so that it can be parsed easily by the built-in module, ast.  The key to this dictionary is the sensor's name, and the value is the sensor value. This is convenient because fields are named after the sensor, and it is easy to match datatable fields with dictionary keys.
 \par Information about each sensor node and sensor values at a certain time are encapsulated in "Node" or "data" classes.  Abstracting the sensors and data values as objects is convenient because it allows data to be easily linked to the sensor it came from. It also allows us to store important information about the sensors, such as their physical location or ip address, as class attributes. Finally, SQLAlchemy writes rows to tables by assigning objects, so using an object oriented approach allows simple integration.
 \par All historical data is stored to a SQLite database because SQL provides a much cleaner and robust way of accessing large amounts of data than simply writing a csv file.  While a csv, numpy dtype, or pickle would have likely worked for the current scope of the project, using SQLite was determined to be the best approach in the interest of Flask integration and general scalability.
+\FloatBarrier
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=5in]{flowpicture.png}
+\includegraphics{flowpicture}
+\caption{Graphical representation of the flow of information through our system.}
+\FloatBarrier
+\end{figure}
+
+\subsection*{Data Structures}
+\par Most data was stored in SQLAlchemy objects.  While the program is running, active nodes are stored in lists.  Input data comes in the form of a dictionary.
 
 \subsection*{UML Diagram}
 %\FloatBarrier
@@ -28,6 +39,12 @@
 %    \caption{UML diagram}
 %\end{figure}
 %\FloatBarrier
+
+\begin{figure}[ht!]
+\centering
+\includegraphics{UML}
+\caption{UML diagram for SQL classes and Flask Login Manager}
+\end{figure}
 
 \section*{Results}
 \par The product we presented during the class demo-day was something we were proud to put our names on. Because we reached our minimum deliverable relatively early in the project, our product incorporated some of the features we scoped out intially as extensions, and shows some refinement towards our design criteria
@@ -41,6 +58,9 @@
  \item All configuration changes can be made without modifying source: Adding new sensor nodes requires modifying a "config.txt file" and migrating databases involves running a couple of python scripts.
 \end{itemize}
 Although in a software project, it is also possible to add more features, improve source maintainability, or beautify UI elements, we were satisfied with what we accomplished in the time alotted, considering also that we had a hardware component to work with, and learned to work with SQL and Flask independently.
+
+\section*{Design Reflection}
+\par We divided the system into very appropriate functinoal blocks, which made integration relatively easy.  We also ended up using very appropriate tools for each, namely Flask and SQLAlecemy.  Moving from CSV files to SQL for databasing was one of the best decisions we made.  In the future, however, we're thinking about changing the way communication works - namely having the Arduino's POST as opposed to the code GETing so that the system can be exported to an external server.
 
 \section*{Division of Labor}
 \par The first step of our project, networking hardware, was difficult to work on in parallel because all downstream elements depended on it. Until we had the Arduino sensor kits installed and network enabled, we could not write data acquisition scripts and it was difficult to determine how to create reasonable databases. We were able to write different aspects of the data acquistion routine in parallel however. The downloading from a webpage, webpage parsing, and data storage could be written independently provieded the input and output formats were known, which we did a decent job of documenting and keeping consistent. We later moved on to writing SQL models and the Flask app in parallel until the two were mature enough to be integrated. While this project was relatively large in scope for two people, our small team size ended up being appropriate.

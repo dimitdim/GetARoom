@@ -3,7 +3,7 @@
 {% if data %}
 <h2>
 <p><u>{{ data.origin.name }} ({{ data.origin.loc }})</u></p>
-<p>Status: <font color={% if data.brightness<767 %}"green">VACANT{% else %}"red">OCCUPIED{% endif %}</font></p>
+<p>Status: <font color={% if data.brightness<300 %}"green">VACANT{% else %}"red">OCCUPIED{% endif %}</font></p>
 <p>Last Updated: {{ meas }}</p> 
 <p>Brightness: {{ (data.brightness*100/1023)|int }}%<br>
 Temperature: {% if user.temp=='f' %}{{ (32+1.8*(data.temperature*500/1023))|int }}&degF{% else %}{{ (data.temperature*500/1023)|int }}&degC{% endif %}<br>
@@ -22,7 +22,7 @@ Door Last Opened: {{ door }}</p>
 {% endfor %}
 </ul>
 </h3>
-<p>{{ data.origin }}.</p>
+<p><a href="http://{{ data.origin.ip }}">{{ data.origin }}</a>.</p>
 {% else %}
 <h2>
 <p>No data. Sorry!</p>
