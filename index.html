@@ -42,7 +42,7 @@
       <p><u>GitHub:</u> https://github.com/dimitdim/GetARoom</p>
       
       <h2>Design</h2>
-      <u><p>0. Hardware:</p></u><li>
+      <u><p>0. Hardware:</p></u><ul>
       <li>We have an ambient light sensor and a temperature sensor attached to an Arduino</li>
       <li>We will have a microphone with an envelope filter attached, time permitting</li>
       <li>We also have a proximity sensor attached, which detects the opening of a door</li>
@@ -50,24 +50,33 @@
       <li>We’re using an ENC28J60 card for ethernet</li>
       <li>Time permitting, we may reduce the price per kit by programming ATMega’s instead of Arduino’s and using ENC28J60 chips</li></ul>
       <u><p>1. Arduino Code</p></u><ul>
-      <li>The Arduino code uses an ENC28J60 to host a website displaying data and hardware uptime</li>
-      <li>Data includes readings from the temperature and light sensors converted to degrees and percent respectively.  They will also include ambient sound data</li>
+      <li>The Arduino code uses an ENC28J60 and an Ethercard library to host a website displaying a python dictionary of raw sensor data and hardware uptime</li>
+      <li>Data includes readings from the temperature and light sensors.  It will also include ambient sound data.</li>
       <li>Data also includes current status of door and time (in terms of hardware uptime) door last detected to be open</li></ul>
       <u><p>2. Data Collection</p></u><ul>
-      <li>Nodes are initialised according to a configuration file</li>
+      <li>Nodes are initialised according to a configuration file; a SQL entry in the Nodes is created if the node is new</li>
       <li>In the future, this file will be updated with a DHCP-assigned IP when a new sensor kit is started</li>
-      <li>Every 10 seconds, the current hosted website is downloaded and parsed for data values</li></ul>
+      <li>Every 10 seconds, the current hosted website is downloaded and parsed for data values</li>
+      <li>A SQL entry in the Data table is created with the raw data, linking to the Node it originated from</li>
+      <li>Nonsensical data is disregarded</li></ul>
       <u><p>3. Data Storage</p></u><ul>
-      <li>We are in the process of rewriting our data storage routines to store information to an SQLite database using the Python library SQL Alchemy.  SQLite allows us to store out data more robustly and with tighter organization than trying to categorize massive data sets into folders and CSVs.</li></ul>
+      <li>Data is stored and organized using Flask-SQLAlchemy</li></ul>
       <u><p>4. Data Analysis</p></u><ul>
+      <li>A script is running detecting long-term changes in the 'last opened' value for each node</li>
       <li>Every time the door is opened, the status of the room is analysed</li>
       <li>If there is a significant increase and/or a rapid fluctuation of any of the parameters, the status of the room is set to occupied</li>
       <li>If there is a significant decrease in any of the parameters, the status is set to vacant</li>
       <li>If none of the parameters change significantly, the status does not change either</li>
       <li>Statuses only change at open-door times</li>
+      <li>Time of change is recorded along with node and status in the Status SQL table</li>
       <li>We will survey use of rooms for a period of time to validate and tune our algorithm</li></ul>
       <u><p>5. Frontend</p></u><ul>
-      <li>We use the Flask library for python to host a website on a server in my room</li>
+      <li>A website is hosted using the Flask library for Python</li>
+      <li>Flask's Login Manager has users login using an OpenID and stores their information in the Users SQL table</li>
+      <li>Users can set preffered temperature scale - more custamization will be available in the future</li>
+      <li>List of Nodes with data is displayed</li>
+      <li>Each node link generates a page displaying the most recent Status database entry, converted for human readibility.  It also diplasys the last time the data was updated</li>
+      <li>The page also displays the last 10 statuses, including time, by parsing the Status table</li>
       <li>In the future, we will talk to IT for campus server space (ideally) or figure out a way to integrate using Heroku with the LAN-connected hardware</li></ul>
 
       
