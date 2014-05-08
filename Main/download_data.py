@@ -72,8 +72,8 @@ def update_database(nodes):
             for key in d_field:
                 if key in d:
                     d_field[key] = d[key]
-        data = models.Data(time.time(), d_field['uptime'], d_field['brightness'], d_field['temperature'], d_field['volume'], d_field['door'], d_field['last'], node) #All the values being passed into data are going to be integers
-        db.session.add(data)
+            data = models.Data(time.time(), d_field['uptime'], d_field['brightness'], d_field['temperature'], d_field['volume'], d_field['door'], d_field['last'], node) #All the values being passed into data are going to be integers
+            db.session.add(data)
     db.session.commit()
     print '.',
 

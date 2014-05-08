@@ -1,7 +1,7 @@
 from app import db,models
 import time
 
-nodes=models.Node.query.all()
+nodes=models.Node.query.filter_by(id=3).all()
 for node in nodes:
     datas=models.Data.query.filter_by(node_id=node.id).order_by('localtimestamp desc').all()
     print len(datas)
