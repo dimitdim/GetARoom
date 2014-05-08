@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=latex 2014.5.7)  7 MAY 2014 22:25
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=latex 2014.5.7)  8 MAY 2014 00:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -287,23 +287,25 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 12.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 12.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 24.
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+[1
+
+]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 28.
+ (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 24.
- [1
-
-] [2] (./report.aux) ) 
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 28.
+ [2] [3] [4]
+(./report.aux) ) 
 Here is how much of TeX's memory you used:
  772 strings out of 495032
  8835 string characters out of 6181558
- 58782 words of memory out of 5000000
+ 59795 words of memory out of 5000000
  4015 multiletter control sequences out of 15000+600000
  7587 words of font info for 27 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  25i,6n,19p,875b,187s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on report.dvi (2 pages, 5220 bytes).
+Output written on report.dvi (4 pages, 10172 bytes).
