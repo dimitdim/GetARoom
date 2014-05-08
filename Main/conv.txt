@@ -1,0 +1,5 @@
+light = (1023-light)*100/2013
+temp = temp*refmV/10230
+sound = sound*100/1023
+door = door*100/1023
+refmV = 5000

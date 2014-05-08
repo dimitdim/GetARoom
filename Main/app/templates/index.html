@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Hello, {{user.nickname}}!</h2>
+<h3>
+<u><p>Available Data:</p></u>
+<ul>
+{% for node in nodes %}
+<li><a href=/node/{{ node.id }}>{{ node.name }} ({{ node.loc }})</a></li>
+{% endfor %}
+</ul></h3>
+{% endblock %}
